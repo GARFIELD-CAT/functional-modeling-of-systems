@@ -1,7 +1,9 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.user;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.RoadMap;
 
 import java.time.LocalDateTime;
@@ -9,10 +11,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String id;
+    Integer id;
 
     @Column(unique = true, nullable = false)
     String login;
@@ -20,18 +25,16 @@ public class User {
     @Column(nullable = false)
     String password;
 
-    @Column(nullable = false)
     LocalDateTime checkInDate;
 
     @ManyToOne
-    @JoinColumn(name = "purpose_of_visit_id", nullable = false)
+    @JoinColumn(name = "purpose_of_visit_id")
     PurposeOfVisit purposeOfVisit;
 
-    @Column(nullable = false)
     Integer plannedDurationOfStay;
 
     @ManyToOne
-    @JoinColumn(name = "country_id", nullable = false)
+    @JoinColumn(name = "country_id")
     Country countryOfCitizenship;
 
     Boolean healthInsurancePolicyAvailable = false;
@@ -41,4 +44,9 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "road_map_id")
     RoadMap roadMap;
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
 }

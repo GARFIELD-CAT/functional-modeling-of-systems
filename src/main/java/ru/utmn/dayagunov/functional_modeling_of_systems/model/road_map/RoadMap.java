@@ -12,7 +12,7 @@ import java.util.List;
 public class RoadMap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String id;
+    Integer id;
 
     @OneToMany(mappedBy = "roadMap", cascade = CascadeType.ALL)
     List<Step> steps;

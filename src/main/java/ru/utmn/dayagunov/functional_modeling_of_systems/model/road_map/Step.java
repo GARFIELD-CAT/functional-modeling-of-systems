@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class Step {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String id;
+    Integer id;
 
     @Column(nullable = false)
     String status;
@@ -24,4 +24,8 @@ public class Step {
     @ManyToOne
     @JoinColumn(name = "rule_id", nullable = false)
     Rule rule;
+
+    @ManyToOne
+    @JoinColumn(name = "road_map_id")
+    private RoadMap roadMap;
 }

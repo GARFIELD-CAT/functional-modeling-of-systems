@@ -8,7 +8,7 @@ import lombok.Data;
 public class PurposeOfVisit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String id;
+    Integer id;
 
     @Column(unique = true, nullable = false)
     String name;
