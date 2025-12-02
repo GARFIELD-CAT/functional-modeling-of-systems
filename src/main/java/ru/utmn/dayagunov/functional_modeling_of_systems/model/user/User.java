@@ -38,7 +38,7 @@ public class User {
 
     Boolean medicalExaminationResultAvailable = false;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "road_map_id")
     RoadMap roadMap;
 }
