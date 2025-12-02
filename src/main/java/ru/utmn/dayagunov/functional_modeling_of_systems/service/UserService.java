@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
-import ru.utmn.dayagunov.functional_modeling_of_systems.repository.UserRepository;
+import ru.utmn.dayagunov.functional_modeling_of_systems.repository.user.UserRepository;
 
 import java.util.Optional;
 
