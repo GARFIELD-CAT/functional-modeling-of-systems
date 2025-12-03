@@ -10,7 +10,6 @@ import ru.utmn.dayagunov.functional_modeling_of_systems.repository.user.CountryR
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.user.PurposeOfVisitRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.user.UserRepository;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
