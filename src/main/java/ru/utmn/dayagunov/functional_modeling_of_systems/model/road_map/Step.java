@@ -16,12 +16,12 @@ public class Step {
     String status = StepStatus.NOT_DONE.getDescription();
 
     @Column(nullable = false)
-    LocalDate deadline;
+    LocalDate deadline = LocalDate.now();
 
     @Column(nullable = false, length = 2500)
     String description;
 
     @ManyToOne
-    @JoinColumn(name = "rule_id", nullable = false)
+    @JoinColumn(name = "rule_id")
     Rule rule;
 }
