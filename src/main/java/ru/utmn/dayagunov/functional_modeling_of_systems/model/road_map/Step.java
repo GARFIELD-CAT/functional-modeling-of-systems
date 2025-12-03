@@ -3,7 +3,7 @@ package ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -13,19 +13,15 @@ public class Step {
     Integer id;
 
     @Column(nullable = false)
-    String status;
+    String status = StepStatus.NOT_DONE.getDescription();
 
     @Column(nullable = false)
-    LocalDateTime deadline;
+    LocalDate deadline;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2500)
     String description;
 
     @ManyToOne
     @JoinColumn(name = "rule_id", nullable = false)
     Rule rule;
-
-    @ManyToOne
-    @JoinColumn(name = "road_map_id")
-    private RoadMap roadMap;
 }

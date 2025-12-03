@@ -2,9 +2,9 @@ package ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,9 +14,7 @@ public class RoadMap {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @OneToMany(mappedBy = "roadMap", cascade = CascadeType.ALL)
-    List<Step> steps;
-
-    @OneToOne(mappedBy = "roadMap")
-    User user;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "road_map_id")
+    List<Step> steps = new ArrayList<>();
 }

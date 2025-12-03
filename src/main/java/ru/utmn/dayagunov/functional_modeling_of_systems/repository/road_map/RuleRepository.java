@@ -1,4 +1,7 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.repository.road_map;
 
-public class RuleRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.Rule;
+
+public interface RuleRepository extends JpaRepository<Rule, Integer> {
 }
