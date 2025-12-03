@@ -5,16 +5,21 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.CreateUserRequestBody;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.UpdateUserRequestBody;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.UserResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.service.UserService;
 
 
 @RestController
 @RequestMapping("/api/users")
+@Validated
 public class UserController {
 
     private final UserService userService;
@@ -41,25 +46,27 @@ public class UserController {
     ) {
         User user = userService.createUser(body.getLogin(), body.getPassword());
 
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.prepareUserResponseDto(user), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Возвращает пользователя по его id")
     @GetMapping("/{id}")
-    public User getUser(
+    public UserResponseDto getUser(
             @PathVariable("id") Integer id
     ) {
-        return userService.getUser(id);
+        User user =  userService.getUser(id);
+
+        return userService.prepareUserResponseDto(user);
     }
 
     @Operation(summary = "Обновляет одного пользователя по его id")
     @PutMapping
     public ResponseEntity<Object> updateUser(
-            @RequestBody User user
+            @Valid @RequestBody UpdateUserRequestBody updateUserRequestBody
     ) {
-        User result = userService.updateUser(user);
+        User result = userService.updateUser(updateUserRequestBody);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(userService.prepareUserResponseDto(result), HttpStatus.OK);
     }
 
     @Operation(summary = "Удаляет пользователя по его id")

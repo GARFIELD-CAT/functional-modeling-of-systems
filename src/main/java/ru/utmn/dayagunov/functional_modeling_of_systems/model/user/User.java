@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.RoadMap;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 @Entity
@@ -25,7 +25,7 @@ public class User {
     @Column(nullable = false)
     String password;
 
-    LocalDateTime checkInDate;
+    LocalDate checkInDate;
 
     @ManyToOne
     @JoinColumn(name = "purpose_of_visit_id")
