@@ -33,7 +33,7 @@ public class UserController {
             @ApiResponse(
                     responseCode = "201",
                     description = "Пользователь успешно создан",
-                    content = @Content(schema = @Schema(implementation = User.class))
+                    content = @Content(schema = @Schema(implementation = UserResponseDto.class))
             ),
             @ApiResponse(responseCode = "400", description = "Некорректные данные запроса"),
             @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
@@ -50,16 +50,34 @@ public class UserController {
     }
 
     @Operation(summary = "Возвращает пользователя по его id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Пользователь успешно найден",
+                    content = @Content(schema = @Schema(implementation = UserResponseDto.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @GetMapping("/{id}")
-    public UserResponseDto getUser(
+    public ResponseEntity<Object> getUser(
             @PathVariable("id") Integer id
     ) {
-        User user =  userService.getUser(id);
+        User user = userService.getUser(id);
 
-        return userService.prepareUserResponseDto(user);
+        return new ResponseEntity<>(userService.prepareUserResponseDto(user), HttpStatus.OK);
     }
 
     @Operation(summary = "Обновляет одного пользователя по его id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Пользователь успешно обновлен",
+                    content = @Content(schema = @Schema(implementation = UserResponseDto.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @PutMapping
     public ResponseEntity<Object> updateUser(
             @Valid @RequestBody UpdateUserRequestBody updateUserRequestBody
@@ -70,11 +88,20 @@ public class UserController {
     }
 
     @Operation(summary = "Удаляет пользователя по его id")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Пользователь успешно удален"
+            ),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @DeleteMapping("/{id}")
-    public void deleteUser(
+    public ResponseEntity<Object> deleteUser(
             @PathVariable("id") Integer id
     ) {
         userService.deleteUser(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
