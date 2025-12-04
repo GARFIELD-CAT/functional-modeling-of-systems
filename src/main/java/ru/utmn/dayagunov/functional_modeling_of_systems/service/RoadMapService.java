@@ -40,10 +40,9 @@ public class RoadMapService {
             user.setRoadMap(null);
         }
 
-        List<Step> steps = createRoadMapStep(user);
+        List<Step> steps = createRoadMapSteps(user);
         RoadMap roadMap = new RoadMap();
 
-        stepRepository.saveAll(steps);
         roadMap.setSteps(steps);
         roadMapRepository.save(roadMap);
         user.setRoadMap(roadMap);
@@ -52,7 +51,7 @@ public class RoadMapService {
         return roadMap;
     }
 
-    private List<Step> createRoadMapStep(User user) {
+    private List<Step> createRoadMapSteps(User user) {
         List<Rule> rules = ruleRepository.findAll();
         List<Step> steps = new ArrayList<>();
         HashSet<String> addedOutcome = new HashSet<>();
@@ -125,6 +124,8 @@ public class RoadMapService {
             step.setDescription(WARNING_MESSAGE_UNABLE_TO_CREATE_ROADMAP);
             steps.add(step);
         }
+
+        stepRepository.saveAll(steps);
 
         return steps;
     }
