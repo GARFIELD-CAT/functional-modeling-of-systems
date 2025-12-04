@@ -15,12 +15,12 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserService {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final CountryRepository countryRepository;
     private final PurposeOfVisitRepository purposeOfVisitRepository;
 
     public User createUser(String login, String password) {
-        Optional<User> result = repository.findUserByLogin(login);
+        Optional<User> result = userRepository.findUserByLogin(login);
 
         if (result.isPresent()) {
             throw new ResponseStatusException(
@@ -30,20 +30,20 @@ public class UserService {
 
         User user = new User(login, password);
 
-        repository.save(user);
+        userRepository.save(user);
 
         return user;
     }
 
     public User updateUser(UpdateUserRequestBody updateUserRequestBody) {
-        User user = repository.findById(updateUserRequestBody.getId()).orElseThrow(
+        User user = userRepository.findById(updateUserRequestBody.getId()).orElseThrow(
                 () -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, String.format("Пользователь с id=%d не существует", updateUserRequestBody.getId())
                 )
         );
 
         if (updateUserRequestBody.getLogin() != null) {
-            Optional<User> userByLogin = repository.findUserByLogin(updateUserRequestBody.getLogin());
+            Optional<User> userByLogin = userRepository.findUserByLogin(updateUserRequestBody.getLogin());
 
             if (userByLogin.isPresent()) {
                 if (!user.getId().equals(userByLogin.get().getId())) {
@@ -78,11 +78,11 @@ public class UserService {
         user.setHealthInsurancePolicyAvailable(updateUserRequestBody.getHealthInsurancePolicyAvailable());
         user.setMedicalExaminationResultAvailable(updateUserRequestBody.getMedicalExaminationResultAvailable());
 
-        return repository.save(user);
+        return userRepository.save(user);
     }
 
     public User getUser(Integer id) {
-        return repository.findById(id).orElseThrow(
+        return userRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, String.format("Пользователь с id=%d не существует", id)
                 )
@@ -90,13 +90,13 @@ public class UserService {
     }
 
     public void deleteUser(Integer id) {
-        repository.findById(id).orElseThrow(
+        userRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, String.format("Пользователь с id=%d не существует", id)
                 )
         );
 
-        repository.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     public UserResponseDto prepareUserResponseDto(User user) {
