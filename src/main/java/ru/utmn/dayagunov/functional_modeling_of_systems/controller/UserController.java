@@ -42,7 +42,7 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<Object> createUser(
-            @RequestBody CreateUserRequestBody body
+            @Valid @RequestBody CreateUserRequestBody body
     ) {
         User user = userService.createUser(body.getLogin(), body.getPassword());
 

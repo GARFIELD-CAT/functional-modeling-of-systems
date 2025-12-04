@@ -133,7 +133,7 @@ public class RoadMapService {
     public RoadMap getRoadMap(Integer id) {
         return roadMapRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, String.format("Дорожная карта с таким id=%d не существует", id)
+                        HttpStatus.NOT_FOUND, String.format("Дорожная карта с id=%d не существует", id)
                 )
         );
     }

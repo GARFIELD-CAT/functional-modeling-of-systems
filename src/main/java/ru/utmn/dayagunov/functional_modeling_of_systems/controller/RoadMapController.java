@@ -32,7 +32,7 @@ public class RoadMapController {
             @ApiResponse(
                     responseCode = "201",
                     description = "Дорожная карта успешно создана",
-                    content = @Content(schema = @Schema(implementation = User.class))
+                    content = @Content(schema = @Schema(implementation = RoadMap.class))
             ),
             @ApiResponse(responseCode = "400", description = "Некорректные данные запроса"),
             @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
@@ -50,11 +50,20 @@ public class RoadMapController {
     }
 
     @Operation(summary = "Возвращает дорожную карту по ее id")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Дорожная карта успешно найдена",
+                    content = @Content(schema = @Schema(implementation = RoadMap.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "Дорожная карта не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @GetMapping("/{id}")
-    public RoadMap getRoadMap(
+    public ResponseEntity<Object> getRoadMap(
             @PathVariable("id") Integer id
     ) {
-        return roadMapService.getRoadMap(id);
+        return new ResponseEntity<>(roadMapService.getRoadMap(id), HttpStatus.OK);
     }
 
 }

@@ -24,7 +24,7 @@ public class UserService {
 
         if (result.isPresent()) {
             throw new ResponseStatusException(
-                    HttpStatus.CONFLICT, String.format("Пользователь с таким login=%s уже существует.", login)
+                    HttpStatus.CONFLICT, String.format("Пользователь с login=%s уже существует.", login)
             );
         }
 
@@ -42,7 +42,7 @@ public class UserService {
     public User updateUser(UpdateUserRequestBody updateUserRequestBody) {
         User user = repository.findById(updateUserRequestBody.getId()).orElseThrow(
                 () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, String.format("Пользователь с таким id=%d не существует", updateUserRequestBody.getId())
+                        HttpStatus.NOT_FOUND, String.format("Пользователь с id=%d не существует", updateUserRequestBody.getId())
                 )
         );
 
@@ -51,19 +51,19 @@ public class UserService {
         if (userByLogin.isPresent()) {
             if (!user.getId().equals(userByLogin.get().getId())) {
                 throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, String.format("Пользователь с таким login=%s уже существует", updateUserRequestBody.getLogin())
+                        HttpStatus.BAD_REQUEST, String.format("Пользователь с login=%s уже существует", updateUserRequestBody.getLogin())
                 );
             }
         }
 
         Country country = countryRepository.findById(updateUserRequestBody.getCountryOfCitizenshipId()).orElseThrow(
                 () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, String.format("Страны с таким id=%d не существует", updateUserRequestBody.getCountryOfCitizenshipId())
+                        HttpStatus.NOT_FOUND, String.format("Страны с id=%d не существует", updateUserRequestBody.getCountryOfCitizenshipId())
                 )
         );
         PurposeOfVisit purposeOfVisit = purposeOfVisitRepository.findById(updateUserRequestBody.getPurposeOfVisitId()).orElseThrow(
                 () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, String.format("Цели визита с таким id=%d не существует", updateUserRequestBody.getPurposeOfVisitId())
+                        HttpStatus.NOT_FOUND, String.format("Цели визита с id=%d не существует", updateUserRequestBody.getPurposeOfVisitId())
                 )
         );
 
@@ -82,7 +82,7 @@ public class UserService {
     public User getUser(Integer id) {
         return repository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, String.format("Пользователь с таким id=%d не существует", id)
+                        HttpStatus.NOT_FOUND, String.format("Пользователь с id=%d не существует", id)
                 )
         );
     }
@@ -90,7 +90,7 @@ public class UserService {
     public void deleteUser(Integer id) {
         repository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, String.format("Пользователь с таким id=%d не существует", id)
+                    HttpStatus.NOT_FOUND, String.format("Пользователь с id=%d не существует", id)
                 )
             );
 

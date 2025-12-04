@@ -1,6 +1,7 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.user;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +15,11 @@ public class UpdateUserRequestBody {
     private Integer id;
 
     @NotNull(message = "Логин должен быть указан.")
+    @Size(min = 8, max = 30, message = "Размер должен быть от 8 до 30 символов")
     private String login;
 
     @NotNull(message = "Пароль должен быть указан.")
+    @Size(min = 8, max = 30, message = "Размер должен быть от 8 до 30 символов")
     private String password;
 
     @NotNull(message = "Дата въезда должна быть указана.")
@@ -31,9 +34,9 @@ public class UpdateUserRequestBody {
     @NotNull(message = "ID страны гражданства должно быть указано.")
     private Integer countryOfCitizenshipId;
 
-    @NotNull(message = "Запланированная длительность пребывания должна быть указана.")
+    @NotNull(message = "Наличие полиса обязательного или дополнительного медицинского страхования должно быть указано.")
     private Boolean healthInsurancePolicyAvailable;
 
-    @NotNull(message = "Запланированная длительность пребывания должна быть указана.")
+    @NotNull(message = "Наличие результата медицинского освидетельствования на отсутствие заболеваний должно быть указано.")
     private Boolean medicalExaminationResultAvailable;
 }
