@@ -1,5 +1,6 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.user;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class UpdateUserRequestBody {
     private LocalDate checkInDate;
 
     @NotNull(message = "Запланированная длительность пребывания должна быть указана.")
+    @Min(value = 1, message = "Длительность пребывания не может быть меньше 1 дня.")
     private Integer plannedDurationOfStay;
 
     @NotNull(message = "ID цели визита должно быть указано.")
