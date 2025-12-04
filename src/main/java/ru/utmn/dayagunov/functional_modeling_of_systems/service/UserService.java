@@ -20,7 +20,7 @@ public class UserService {
     private final PurposeOfVisitRepository purposeOfVisitRepository;
 
     public User createUser(String login, String password) {
-        Optional<User> result = findUserByLogin(login);
+        Optional<User> result = repository.findUserByLogin(login);
 
         if (result.isPresent()) {
             throw new ResponseStatusException(
@@ -35,10 +35,6 @@ public class UserService {
         return user;
     }
 
-    public Optional<User> findUserByLogin(String login) {
-        return repository.findUserByLogin(login);
-    }
-
     public User updateUser(UpdateUserRequestBody updateUserRequestBody) {
         User user = repository.findById(updateUserRequestBody.getId()).orElseThrow(
                 () -> new ResponseStatusException(
@@ -46,8 +42,8 @@ public class UserService {
                 )
         );
 
-        if (updateUserRequestBody.getLogin() != null){
-            Optional<User> userByLogin = findUserByLogin(updateUserRequestBody.getLogin());
+        if (updateUserRequestBody.getLogin() != null) {
+            Optional<User> userByLogin = repository.findUserByLogin(updateUserRequestBody.getLogin());
 
             if (userByLogin.isPresent()) {
                 if (!user.getId().equals(userByLogin.get().getId())) {
@@ -71,7 +67,7 @@ public class UserService {
                 )
         );
 
-        if (updateUserRequestBody.getPassword() != null){
+        if (updateUserRequestBody.getPassword() != null) {
             user.setPassword(updateUserRequestBody.getPassword());
         }
 
@@ -96,9 +92,9 @@ public class UserService {
     public void deleteUser(Integer id) {
         repository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, String.format("Пользователь с id=%d не существует", id)
+                        HttpStatus.NOT_FOUND, String.format("Пользователь с id=%d не существует", id)
                 )
-            );
+        );
 
         repository.deleteById(id);
     }
