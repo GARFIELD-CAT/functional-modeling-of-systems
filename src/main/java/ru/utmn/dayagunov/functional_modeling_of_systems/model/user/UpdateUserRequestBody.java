@@ -14,11 +14,9 @@ public class UpdateUserRequestBody {
     @NotNull(message = "ID должно быть указано.")
     private Integer id;
 
-    @NotNull(message = "Логин должен быть указан.")
     @Size(min = 8, max = 30, message = "Размер должен быть от 8 до 30 символов")
     private String login;
 
-    @NotNull(message = "Пароль должен быть указан.")
     @Size(min = 8, max = 30, message = "Размер должен быть от 8 до 30 символов")
     private String password;
 

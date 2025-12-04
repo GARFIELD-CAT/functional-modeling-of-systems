@@ -46,14 +46,18 @@ public class UserService {
                 )
         );
 
-        Optional<User> userByLogin = findUserByLogin(updateUserRequestBody.getLogin());
+        if (updateUserRequestBody.getLogin() != null){
+            Optional<User> userByLogin = findUserByLogin(updateUserRequestBody.getLogin());
 
-        if (userByLogin.isPresent()) {
-            if (!user.getId().equals(userByLogin.get().getId())) {
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, String.format("Пользователь с login=%s уже существует", updateUserRequestBody.getLogin())
-                );
+            if (userByLogin.isPresent()) {
+                if (!user.getId().equals(userByLogin.get().getId())) {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST, String.format("Пользователь с login=%s уже существует", updateUserRequestBody.getLogin())
+                    );
+                }
             }
+
+            user.setLogin(updateUserRequestBody.getLogin());
         }
 
         Country country = countryRepository.findById(updateUserRequestBody.getCountryOfCitizenshipId()).orElseThrow(
@@ -67,10 +71,12 @@ public class UserService {
                 )
         );
 
+        if (updateUserRequestBody.getPassword() != null){
+            user.setPassword(updateUserRequestBody.getPassword());
+        }
+
         user.setCountryOfCitizenship(country);
         user.setPurposeOfVisit(purposeOfVisit);
-        user.setLogin(updateUserRequestBody.getLogin());
-        user.setPassword(updateUserRequestBody.getPassword());
         user.setCheckInDate(updateUserRequestBody.getCheckInDate());
         user.setPlannedDurationOfStay(updateUserRequestBody.getPlannedDurationOfStay());
         user.setHealthInsurancePolicyAvailable(updateUserRequestBody.getHealthInsurancePolicyAvailable());
