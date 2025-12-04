@@ -39,7 +39,7 @@ public class RoadMapController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @PostMapping
-    public ResponseEntity<Object> createRoadMap(
+    public ResponseEntity<Object> showRoadMap(
             @Schema(requiredMode = REQUIRED, description = "Id пользователя")
             @RequestBody Integer user_id
     ) {
