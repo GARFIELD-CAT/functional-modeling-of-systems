@@ -10,10 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.CreateUserRequestBody;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.UpdateUserRequestBody;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.UserResponseDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.dto.CreateUserRequestBodyDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.dto.UserResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.service.UserService;
 
 
@@ -42,7 +41,7 @@ public class UserController {
     })
     @PostMapping
     public ResponseEntity<Object> createUser(
-            @Valid @RequestBody CreateUserRequestBody body
+            @Valid @RequestBody CreateUserRequestBodyDto body
     ) {
         User user = userService.createUser(body.getLogin(), body.getPassword());
 
@@ -68,40 +67,4 @@ public class UserController {
         return new ResponseEntity<>(userService.prepareUserResponseDto(user), HttpStatus.OK);
     }
 
-    @Operation(summary = "Обновляет одного пользователя по его id")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Пользователь успешно обновлен",
-                    content = @Content(schema = @Schema(implementation = UserResponseDto.class))
-            ),
-            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
-    })
-    @PutMapping
-    public ResponseEntity<Object> updateUser(
-            @Valid @RequestBody UpdateUserRequestBody updateUserRequestBody
-    ) {
-        User result = userService.updateUser(updateUserRequestBody);
-
-        return new ResponseEntity<>(userService.prepareUserResponseDto(result), HttpStatus.OK);
-    }
-
-    @Operation(summary = "Удаляет пользователя по его id")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "Пользователь успешно удален"
-            ),
-            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
-    })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUser(
-            @PathVariable("id") Integer id
-    ) {
-        userService.deleteUser(id);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 }
