@@ -73,20 +73,6 @@ public class UserService {
         }
     }
 
-    public void isAdmin() {
-        User currentUser = getCurrentUser();
-
-        if (UserRoles.ADMIN.getValue().equals(currentUser.getRole())) {
-            return;
-        }
-
-        throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN,
-                "Доступ к этому ресурсу запрещён."
-        );
-    }
-
-
     public UserResponseDto prepareUserResponseDto(User user) {
         UserResponseDto userDto = new UserResponseDto();
 

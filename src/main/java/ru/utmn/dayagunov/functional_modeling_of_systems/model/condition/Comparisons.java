@@ -28,13 +28,13 @@ public final class Comparisons {
             }
         }
 
-        // Дата (ISO: yyyy-MM-dd)
+        // Дата (ISO: yyyy-mm-dd)
         if (actual instanceof LocalDate d) {
             try {
                 return d.compareTo(LocalDate.parse(expected));
             } catch (DateTimeParseException e) {
                 throw new IllegalArgumentException(
-                        "Ожидаемая дата '" + expected + "' не в формате yyyy-MM-dd", e);
+                        "Ожидаемая дата '" + expected + "' не в формате yyyy-mm-dd", e);
             }
         }
 

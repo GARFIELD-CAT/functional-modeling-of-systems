@@ -9,11 +9,10 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.ConditionResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.CreateConditionRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.UpdateConditionRequestBodyDto;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.RoadMap;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.Rule;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.condition.ConditionRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Condition;
-import ru.utmn.dayagunov.functional_modeling_of_systems.repository.road_map.RuleRepository;
+import ru.utmn.dayagunov.functional_modeling_of_systems.repository.rule.RuleRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,11 +24,9 @@ import static ru.utmn.dayagunov.functional_modeling_of_systems.util.BeanCopyUtil
 public class ConditionService {
     private final ConditionRepository conditionRepository;
     private final RuleRepository ruleRepository;
-    private final UserService userService;
 
     @Transactional
     public Condition createCondition(CreateConditionRequestBodyDto body) {
-        userService.isAdmin();
         Rule rule = findRuleById(body.getRuleId());
 
         Condition condition = new Condition();
@@ -43,7 +40,6 @@ public class ConditionService {
 
     @Transactional
     public Condition updateCondition(UpdateConditionRequestBodyDto body) {
-        userService.isAdmin();
         Condition condition = findConditionById(body.getId());
         BeanUtils.copyProperties(body, condition, getNullPropertyNames(body));
 
@@ -55,19 +51,16 @@ public class ConditionService {
     }
 
     public Condition getCondition(Integer id) {
-        userService.isAdmin();
         return findConditionById(id);
     }
 
     public List<Condition> getConditionsByRuleId(Integer ruleId) {
-        userService.isAdmin();
         findRuleById(ruleId);
         return conditionRepository.findByRuleId(ruleId);
     }
 
     @Transactional
     public void deleteCondition(Integer id) {
-        userService.isAdmin();
         Condition condition = findConditionById(id);
         conditionRepository.delete(condition);
     }

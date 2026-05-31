@@ -26,8 +26,8 @@ public class Rule {
     private String requiredResult;
 
     // Что нужно сделать.
-    private @Column(nullable = false, columnDefinition = "TEXT")
-    String requiredAction;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String requiredAction;
 
     // Срок.
     @Column(nullable = false)
