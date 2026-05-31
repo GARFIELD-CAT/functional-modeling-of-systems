@@ -12,7 +12,6 @@ import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.Migran
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.RoadMap;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.*;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.UserRoles;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.CountryRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.PurposeOfVisitRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.MigrantRepository;
@@ -55,7 +54,7 @@ public class MigrantService {
     @Transactional
     public Migrant updateMigrant(UpdateMigrantRequestBodyDto body) {
         Migrant migrant = findMigrantById(body.getId());
-        userService.ensureOwnerOrAdmin(migrant);
+        userService.isOwnerOrAdmin(migrant);
         Country country = findCountryById(body.getCountryOfCitizenshipId());
         PurposeOfVisit purpose = findPurposeById(body.getPurposeOfVisitId());
 
@@ -68,7 +67,7 @@ public class MigrantService {
 
     public Migrant getMigrant(Integer id) {
         Migrant migrant = findMigrantById(id);
-        userService.ensureOwnerOrAdmin(migrant);
+        userService.isOwnerOrAdmin(migrant);
 
         return migrant;
     }
@@ -76,7 +75,7 @@ public class MigrantService {
     @Transactional
     public void deleteMigrant(Integer id) {
         Migrant migrant = findMigrantById(id);
-        userService.ensureOwnerOrAdmin(migrant);
+        userService.isOwnerOrAdmin(migrant);
 
         migrantRepository.deleteById(id);
     }

@@ -75,7 +75,7 @@ public class MigrantController {
             @ApiResponse(responseCode = "404", description = "Профиль мигранта не найден"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
-    @PutMapping
+    @PatchMapping
     public ResponseEntity<Object> updateMigrant(
             @Valid @RequestBody UpdateMigrantRequestBodyDto body
     ) {

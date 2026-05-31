@@ -29,7 +29,7 @@ public class DataSeeder implements CommandLineRunner {
             return;
         }
         User user = new User(login, passwordEncoder.encode(password));
-        user.setRole(role.getDescription());
+        user.setRole(role.getValue());
         userRepository.save(user);
         log.info("Создан пользователь '{}' с ролью {}", login, role);
     }

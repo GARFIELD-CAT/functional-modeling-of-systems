@@ -29,7 +29,7 @@ public class User {
     private String lastName;
 
     @Column(nullable = false, length = 30)
-    private String role = UserRoles.USER.getDescription();
+    private String role = UserRoles.USER.getValue();
 
     @Column(updatable = false, nullable = false)
     private LocalDateTime created;

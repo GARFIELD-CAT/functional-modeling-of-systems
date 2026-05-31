@@ -8,7 +8,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
-import static org.springdoc.core.utils.Constants.NULL;
 
 
 @Getter

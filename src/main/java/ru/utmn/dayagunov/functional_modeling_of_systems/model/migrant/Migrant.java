@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanWrapperImpl;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Condition;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Operators;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.RoadMap;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.OwnedByUser;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 
@@ -76,4 +80,18 @@ public class Migrant implements OwnedByUser {
 
     @Column(nullable = false)
     private boolean hasRussianDiploma = false;
+
+    private boolean check(Condition condition) {
+        Object actual = readProperty(condition.getField());
+
+        return condition.getOperator().check(actual, condition.getValue());    }
+
+    private Object readProperty(String path) {
+        try {
+            return new BeanWrapperImpl(this).getPropertyValue(path);
+        } catch (Exception e) {
+            throw new IllegalStateException(
+                    "Не удалось прочитать поле '" + path + "' у мигранта id=" + id, e);
+        }
+    }
 }

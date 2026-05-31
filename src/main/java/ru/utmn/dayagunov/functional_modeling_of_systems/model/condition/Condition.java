@@ -1,9 +1,10 @@
-package ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map;
+package ru.utmn.dayagunov.functional_modeling_of_systems.model.condition;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.Rule;
 
 @Entity
 @Data
@@ -23,7 +24,7 @@ public class Condition {
     private String field;
 
     @Column(nullable = false, length = 10)
-    private String operator = Operators.EQ.getDescription();
+    private Operators operator = Operators.EQ;
 
     @Column(nullable = false, length = 500)
     private String value;

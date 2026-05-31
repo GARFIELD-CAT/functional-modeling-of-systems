@@ -55,10 +55,10 @@ public class UserService {
                         String.format("Пользователь с login=%s не найден.", login)));
     }
 
-    public void ensureOwnerOrAdmin(OwnedByUser entity) {
+    public void isOwnerOrAdmin(OwnedByUser entity) {
         User currentUser = getCurrentUser();
 
-        if (UserRoles.ADMIN.getDescription().equals(currentUser.getRole())) {
+        if (UserRoles.ADMIN.getValue().equals(currentUser.getRole())) {
             return;
         }
 
@@ -72,6 +72,20 @@ public class UserService {
             );
         }
     }
+
+    public void isAdmin() {
+        User currentUser = getCurrentUser();
+
+        if (UserRoles.ADMIN.getValue().equals(currentUser.getRole())) {
+            return;
+        }
+
+        throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "Доступ к этому ресурсу запрещён."
+        );
+    }
+
 
     public UserResponseDto prepareUserResponseDto(User user) {
         UserResponseDto userDto = new UserResponseDto();
