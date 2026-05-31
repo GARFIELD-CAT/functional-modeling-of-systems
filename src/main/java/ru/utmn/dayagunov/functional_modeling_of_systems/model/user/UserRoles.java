@@ -12,5 +12,4 @@ public enum UserRoles {
     UserRoles(String description) {
         this.description = description;
     }
-
 }

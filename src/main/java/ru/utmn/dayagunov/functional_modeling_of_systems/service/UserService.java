@@ -8,7 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.OwnedByUser;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.UserRoles;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.dto.UserResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.user.UserRepository;
 
@@ -51,6 +53,24 @@ public class UserService {
         return userRepository.findByLoginIgnoreCase(login)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format("Пользователь с login=%s не найден.", login)));
+    }
+
+    public void ensureOwnerOrAdmin(OwnedByUser entity) {
+        User currentUser = getCurrentUser();
+
+        if (UserRoles.ADMIN.getDescription().equals(currentUser.getRole())) {
+            return;
+        }
+
+        String currentLogin = currentUser.getLogin();
+        String ownerLogin = entity.getUser().getLogin();
+
+        if (!currentLogin.equals(ownerLogin)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Доступ к этому ресурсу запрещён."
+            );
+        }
     }
 
     public UserResponseDto prepareUserResponseDto(User user) {

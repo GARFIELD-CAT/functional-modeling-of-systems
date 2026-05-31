@@ -1,4 +1,4 @@
-package ru.utmn.dayagunov.functional_modeling_of_systems.model.user;
+package ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,8 +8,8 @@ import lombok.Data;
 public class PurposeOfVisit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
     @Column(unique = true, nullable = false)
-    String name;
+    private String name;
 }
