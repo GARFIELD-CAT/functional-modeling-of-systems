@@ -1,10 +1,14 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class PurposeOfVisit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

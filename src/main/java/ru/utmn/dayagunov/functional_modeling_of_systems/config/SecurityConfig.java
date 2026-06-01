@@ -1,5 +1,6 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,14 +39,15 @@ public class SecurityConfig {
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/users").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/road-maps").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/road-maps").permitAll()
                     .requestMatchers("/api/rules/**").hasRole("ADMIN")
                     .requestMatchers("/api/conditions/**").hasRole("ADMIN")
-                    .requestMatchers("/api/users").hasRole("ADMIN")
                     .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
-                    .requestMatchers("/login/**").permitAll()
-                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
             )
-            .httpBasic(Customizer.withDefaults());
+            .formLogin(Customizer.withDefaults())
+            .logout(Customizer.withDefaults());
 
         return http.build();
     }

@@ -1,27 +1,31 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.Rule;
 
 import java.time.LocalDate;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = "rule")
+@EqualsAndHashCode(of = "id")
+@Table(name = "steps")
 public class Step {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
     @Column(nullable = false)
-    String status = StepStatus.NOT_DONE.getDescription();
+    private LocalDate deadline = LocalDate.now();
 
-    @Column(nullable = false)
-    LocalDate deadline = LocalDate.now();
-
-    @Column(nullable = false, length = 2500)
-    String description;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String message;
 
     @ManyToOne
     @JoinColumn(name = "rule_id")
-    Rule rule;
+    private Rule rule;
 }

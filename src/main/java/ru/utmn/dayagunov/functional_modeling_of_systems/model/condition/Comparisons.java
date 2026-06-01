@@ -9,6 +9,8 @@ import java.util.Arrays;
 @NoArgsConstructor
 public final class Comparisons {
     public static int compare(Object actual, String expected) {
+        actual = unwrapEntity(actual);
+
         if (actual == null) {
             throw new IllegalStateException(
                     "Невозможно сравнить null с '" + expected + "'");
@@ -52,9 +54,22 @@ public final class Comparisons {
         if (actual == null) {return false;}
         if (expected == null || expected.isBlank()) {return false;}
 
+        actual = unwrapEntity(actual);
+
         String actualStr = String.valueOf(actual);
         return Arrays.stream(expected.split(","))
                 .map(String::trim)
                 .anyMatch(actualStr::equals);
+    }
+
+    public static Object unwrapEntity(Object value) {
+        if (value == null) return null;
+        try {
+            return value.getClass().getMethod("getId").invoke(value);
+        } catch (NoSuchMethodException e) {
+            return value;        // не сущность — оставляем как было
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Не удалось вызвать getId() у " + value, e);
+        }
     }
 }

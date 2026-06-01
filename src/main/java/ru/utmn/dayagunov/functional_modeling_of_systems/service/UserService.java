@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.OwnedByUser;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
@@ -19,10 +20,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public User createUser(String login, String password) {
         Optional<User> result = userRepository.findByLoginIgnoreCase(login);
 
@@ -38,6 +39,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional(readOnly = true)
     public User getUser(Integer id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -46,6 +48,7 @@ public class UserService {
         );
     }
 
+    @Transactional(readOnly = true)
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();

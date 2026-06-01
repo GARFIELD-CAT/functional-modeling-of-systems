@@ -1,10 +1,10 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.ConditionResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.CreateConditionRequestBodyDto;
@@ -50,10 +50,12 @@ public class ConditionService {
         return conditionRepository.save(condition);
     }
 
+    @Transactional(readOnly = true)
     public Condition getCondition(Integer id) {
         return findConditionById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<Condition> getConditionsByRuleId(Integer ruleId) {
         findRuleById(ruleId);
         return conditionRepository.findByRuleId(ruleId);

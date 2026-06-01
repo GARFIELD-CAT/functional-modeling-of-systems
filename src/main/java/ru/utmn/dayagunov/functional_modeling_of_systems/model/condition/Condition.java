@@ -1,15 +1,16 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.condition;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.Rule;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "rule")
+@EqualsAndHashCode(of = "id")
 @Table(name = "conditions")
 public class Condition {
     @Id

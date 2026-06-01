@@ -1,17 +1,27 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Condition;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.ConditionResponseDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.Country;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.PurposeOfVisit;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.MigrantResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.RoadMap;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.Rule;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.dto.RoadMapResponseDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.dto.StepResponseDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.Rule;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.Step;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.Migrant;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.road_map.RoadMapRepository;
-import ru.utmn.dayagunov.functional_modeling_of_systems.repository.road_map.RuleRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.road_map.StepRepository;
-import ru.utmn.dayagunov.functional_modeling_of_systems.repository.user.UserRepository;
+import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.MigrantRepository;
+import ru.utmn.dayagunov.functional_modeling_of_systems.repository.rule.RuleRepository;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -20,108 +30,83 @@ import static ru.utmn.dayagunov.functional_modeling_of_systems.Constants.*;
 
 
 @Service
+@RequiredArgsConstructor
 public class RoadMapService {
     private final RoadMapRepository roadMapRepository;
     private final RuleRepository ruleRepository;
     private final StepRepository stepRepository;
-    private final UserRepository userRepository;
-
-    public RoadMapService(RoadMapRepository roadMapRepository, RuleRepository ruleRepository, StepRepository stepRepository, UserRepository userRepository) {
-        this.roadMapRepository = roadMapRepository;
-        this.ruleRepository = ruleRepository;
-        this.stepRepository = stepRepository;
-        this.userRepository = userRepository;
-    }
+    private final MigrantRepository migrantRepository;
+    private final UserService userService;
 
     @Transactional
-    public RoadMap createRoadMap(User user) {
-        if (user.getRoadMap() != null) {
-            roadMapRepository.deleteById(user.getRoadMap().getId());
-            user.setRoadMap(null);
+    public RoadMap createRoadMap() {
+//       Делать за 1 запрос через юзер сервис???
+        User user = userService.getCurrentUser();
+        Optional<Migrant> result = migrantRepository.findMigrantByUserId(user.getId());
+
+        if (result.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Профиль мигранта для текущего пользователя не найден."
+            );
         }
 
-        List<Step> steps = createRoadMapSteps(user);
-        RoadMap roadMap = new RoadMap();
+        Migrant migrant = result.get();
 
+        if (migrant.getRoadMap() != null) {
+            roadMapRepository.deleteById(migrant.getRoadMap().getId());
+            migrant.setRoadMap(null);
+        }
+
+        List<Step> steps = createRoadMapSteps(migrant);
+        RoadMap roadMap = new RoadMap();
         roadMap.setSteps(steps);
         roadMapRepository.save(roadMap);
-        user.setRoadMap(roadMap);
-        userRepository.save(user);
+        migrant.setRoadMap(roadMap);
+        migrantRepository.save(migrant);
 
         return roadMap;
     }
 
-    private List<Step> createRoadMapSteps(User user) {
-        List<Rule> rules = ruleRepository.findAll();
+    @Transactional
+    private List<Step> createRoadMapSteps(Migrant migrant) {
+        List<Rule> rules = ruleRepository.findEffectiveOn(LocalDate.now());
         List<Step> steps = new ArrayList<>();
-        HashSet<String> addedOutcome = new HashSet<>();
-
-        if (user.getHealthInsurancePolicyAvailable()) {
-            addedOutcome.add(HEALTH_INSURANCE_POLICY_MARKER);
-        }
-
-        if (user.getMedicalExaminationResultAvailable()) {
-            addedOutcome.add(MEDICAL_EXAMINATION_RESULT_MARKER);
-        }
+        HashSet<String> allMessages = new HashSet<>();
 
         for (var rule : rules) {
-            String actionRequired = rule.getActionRequired();
-            String requiredOutcome = rule.getRequiredOutcome();
-            Integer period = rule.getPeriod();
+            List<Condition> conditions = rule.getConditions();
+            boolean isAllConditionsPassed = true;
 
-            if (addedOutcome.contains(rule.getRequiredOutcome())) {
+            for (var condition : conditions) {
+                if (!migrant.check(condition)) {
+                    isAllConditionsPassed = false;
+                    break;
+                }
+            }
+
+            if (!isAllConditionsPassed) {
                 continue;
             }
 
-            if (Objects.equals(requiredOutcome, MEDICAL_EXAMINATION_RESULT_MARKER)) {
-                if (Objects.equals(user.getPurposeOfVisit().getId(), WORK_ACTIVITY_ID)) {
-                    period = 30;
-                } else if ((user.getPlannedDurationOfStay() > 90) && (rule.getPurposeOfVisit() == null)) {
-                    period = 90;
-                } else {
-                    continue;
-                }
-            } else if (Objects.equals(requiredOutcome, HEALTH_INSURANCE_POLICY_MARKER)) {
-                if (!Objects.equals(user.getPurposeOfVisit().getId(), WORK_ACTIVITY_ID)) {
-                    continue;
-                }
+            LocalDate deadline = calculateDeadline(rule, migrant);
+            String message = generateMessage(rule, deadline);
 
-                if (!Arrays.asList(rule.getCountries()).contains(user.getCountryOfCitizenship().getName())) {
-                    continue;
-                }
-
-                period = 30;
+            if (allMessages.contains(message)) {
+                continue;
             }
 
             Step step = new Step();
-            LocalDate deadline;
-
-            if (user.getCheckInDate() == null) {
-                deadline = LocalDate.now().plusDays(period);
-            } else {
-                deadline = user.getCheckInDate().plusDays(period);
-            }
-
-            String description = String.format(
-                    "Что нужно получить: %s\nЧто нужно сделать: %s\nКрайний срок: %s",
-                    requiredOutcome, actionRequired, deadline
-            );
-
-            if (deadline.isBefore(LocalDate.now())) {
-                description = WARNING_MESSAGE_DOCUMENTS_DEADLINE_EXPIRED + '\n' + description;
-            }
-
             step.setDeadline(deadline);
-            step.setDescription(description);
+            step.setMessage(message);
             step.setRule(rule);
 
             steps.add(step);
-            addedOutcome.add(rule.getRequiredOutcome());
+            allMessages.add(message);
         }
 
         if (steps.isEmpty()) {
             Step step = new Step();
-            step.setDescription(WARNING_MESSAGE_UNABLE_TO_CREATE_ROADMAP);
+            step.setMessage(WARNING_MESSAGE_UNABLE_TO_CREATE_ROADMAP);
             steps.add(step);
         }
 
@@ -130,12 +115,63 @@ public class RoadMapService {
         return steps;
     }
 
-
+    @Transactional(readOnly = true)
     public RoadMap getRoadMap(Integer id) {
         return roadMapRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, String.format("Дорожная карта с id=%d не существует", id)
                 )
         );
+    }
+
+    public RoadMapResponseDto prepareRoadMapResponseDto(RoadMap roadMap) {
+        RoadMapResponseDto dto = new RoadMapResponseDto();
+        BeanUtils.copyProperties(roadMap, dto);
+
+        List<StepResponseDto> steps = Optional.ofNullable(roadMap.getSteps())
+                .orElse(List.of()).stream()
+                .sorted(Comparator.comparing(
+                        Step::getDeadline,
+                        Comparator.nullsLast(Comparator.naturalOrder())))
+                .map(this::prepareStepResponseDto)
+                .toList();
+
+        dto.setSteps(steps);
+
+        return dto;
+    }
+
+    private StepResponseDto prepareStepResponseDto(Step step) {
+        StepResponseDto dto = new StepResponseDto();
+        BeanUtils.copyProperties(step, dto);
+
+        return dto;
+    }
+
+    private String generateMessage(Rule rule, LocalDate deadline) {
+        String message = String.format(
+                "Что нужно получить: %s\nЧто нужно сделать: %s\nКрайний срок: %s",
+                rule.getRequiredResult(), rule.getRequiredAction(), deadline
+        );
+
+        if (deadline.isBefore(LocalDate.now())) {
+            message = WARNING_MESSAGE_DOCUMENTS_DEADLINE_EXPIRED + '\n' + message;
+        }
+
+        return message;
+    }
+
+    private LocalDate calculateDeadline(Rule rule, Migrant migrant) {
+        LocalDate deadline;
+        Integer period = rule.getPeriod();
+        LocalDate entryDate = migrant.getEntryDate();
+
+        if (entryDate == null) {
+            deadline = LocalDate.now().plusDays(period);
+        } else {
+            deadline = entryDate.plusDays(period);
+        }
+
+        return deadline;
     }
 }

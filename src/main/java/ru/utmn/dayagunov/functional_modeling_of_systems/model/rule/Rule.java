@@ -1,9 +1,7 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.rule;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Condition;
 
 import java.time.LocalDate;
@@ -12,9 +10,12 @@ import java.util.List;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "conditions")
+@EqualsAndHashCode(of = "id")
 @Table(name = "rules")
 public class Rule {
     @Id

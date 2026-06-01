@@ -1,10 +1,10 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.ConditionResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.Rule;
@@ -13,6 +13,7 @@ import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.dto.RuleRespo
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.dto.UpdateRuleRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.rule.RuleRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,11 +42,17 @@ public class RuleService {
         return rule;
     }
 
+    @Transactional(readOnly = true)
     public Rule getRule(Integer id) {
         return findRuleById(id);
     }
 
-    public List<Rule> listRules() {
+    @Transactional(readOnly = true)
+    public List<Rule> listRules(boolean onlyActive) {
+        if (onlyActive) {
+            return ruleRepository.findEffectiveOn(LocalDate.now());
+        }
+
         return ruleRepository.findAll();
     }
 

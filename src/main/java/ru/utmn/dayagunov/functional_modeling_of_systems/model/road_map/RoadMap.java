@@ -1,20 +1,26 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = "steps")
+@EqualsAndHashCode(of = "id")
+@Table(name = "road_maps")
 public class RoadMap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "road_map_id")
-    List<Step> steps = new ArrayList<>();
+    private List<Step> steps = new ArrayList<>();
 }

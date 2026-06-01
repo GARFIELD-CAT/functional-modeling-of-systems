@@ -1,10 +1,10 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.CreateMigrantRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.UpdateMigrantRequestBodyDto;
@@ -65,6 +65,7 @@ public class MigrantService {
         return migrantRepository.save(migrant);
     }
 
+    @Transactional(readOnly = true)
     public Migrant getMigrant(Integer id) {
         Migrant migrant = findMigrantById(id);
         userService.isOwnerOrAdmin(migrant);

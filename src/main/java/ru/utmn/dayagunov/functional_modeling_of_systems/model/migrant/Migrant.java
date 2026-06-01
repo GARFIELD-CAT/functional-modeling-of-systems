@@ -1,24 +1,23 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.beans.BeanWrapperImpl;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Condition;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Operators;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.RoadMap;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.OwnedByUser;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"user", "countryOfCitizenship", "purposeOfVisit", "roadMap"})
+@EqualsAndHashCode(of = "id")
 @Table(name = "migrants")
 public class Migrant implements OwnedByUser {
     @Id
@@ -81,7 +80,7 @@ public class Migrant implements OwnedByUser {
     @Column(nullable = false)
     private boolean hasRussianDiploma = false;
 
-    private boolean check(Condition condition) {
+    public boolean check(Condition condition) {
         Object actual = readProperty(condition.getField());
 
         return condition.getOperator().check(actual, condition.getValue());    }

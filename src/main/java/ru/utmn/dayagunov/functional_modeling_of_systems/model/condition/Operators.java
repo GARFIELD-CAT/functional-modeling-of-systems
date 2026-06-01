@@ -1,7 +1,5 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.condition;
 
-import lombok.Getter;
-
 //@Getter
 //public enum Operators {
 //    EQ("EQ"), // Равно
@@ -25,6 +23,8 @@ public enum Operators {
             if (actual == null) {
                 return expected == null || "null".equals(expected);
             }
+
+            actual = Comparisons.unwrapEntity(actual);
 
             return String.valueOf(actual).equals(expected);
         }

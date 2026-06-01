@@ -1,6 +1,7 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -73,8 +74,11 @@ public class RuleController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @GetMapping
-    public List<RuleResponseDto> list() {
-        return ruleService.listRules().stream()
+    public List<RuleResponseDto> list(
+        @Parameter(description = "Возвращать только действующие правила")
+        @RequestParam(defaultValue = "true") boolean onlyActive
+    ) {
+        return ruleService.listRules(onlyActive).stream()
                 .map(ruleService::prepareRuleResponseDto)
                 .toList();
     }

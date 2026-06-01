@@ -1,14 +1,11 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class MigrantResponseDto {
     private Integer id;
     private LocalDate entryDate;
