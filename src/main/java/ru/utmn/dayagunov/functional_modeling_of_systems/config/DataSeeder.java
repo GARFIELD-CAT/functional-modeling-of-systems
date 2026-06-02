@@ -19,7 +19,7 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        seedUser("user",  "userPass",  UserRoles.USER);
+        seedUser("user", "userPass", UserRoles.USER);
         seedUser("admin", "adminPass", UserRoles.ADMIN);
     }
 

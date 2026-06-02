@@ -3,7 +3,6 @@ package ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

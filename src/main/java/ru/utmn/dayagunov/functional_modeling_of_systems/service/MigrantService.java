@@ -6,15 +6,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.Country;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.Migrant;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.PurposeOfVisit;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.CreateMigrantRequestBodyDto;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.UpdateMigrantRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.MigrantResponseDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.UpdateMigrantRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.RoadMap;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.*;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.CountryRepository;
-import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.PurposeOfVisitRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.MigrantRepository;
+import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.PurposeOfVisitRepository;
 
 import java.util.Optional;
 
@@ -30,8 +32,8 @@ public class MigrantService {
 
     @Transactional
     public Migrant createMigrant(CreateMigrantRequestBodyDto body) {
-        User currentUser = userService.getCurrentUser();
-        Optional<Migrant> result = migrantRepository.findMigrantByUserId(currentUser.getId());
+        String userLogin = userService.getCurrentUserLogin();
+        Optional<Migrant> result = migrantRepository.findByUserLogin(userLogin);
 
         if (result.isPresent()) {
             throw new ResponseStatusException(
@@ -39,6 +41,7 @@ public class MigrantService {
             );
         }
 
+        User currentUser = userService.getCurrentUser();
         Country country = findCountryById(body.getCountryOfCitizenshipId());
         PurposeOfVisit purpose = findPurposeById(body.getPurposeOfVisitId());
 

@@ -11,10 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.CreateMigrantRequestBodyDto;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.UpdateMigrantRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.Migrant;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.CreateMigrantRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.MigrantResponseDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.UpdateMigrantRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.service.MigrantService;
 
 

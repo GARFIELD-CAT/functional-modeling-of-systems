@@ -1,7 +1,9 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.user;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 

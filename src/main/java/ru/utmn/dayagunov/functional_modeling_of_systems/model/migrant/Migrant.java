@@ -83,7 +83,8 @@ public class Migrant implements OwnedByUser {
     public boolean check(Condition condition) {
         Object actual = readProperty(condition.getField());
 
-        return condition.getOperator().check(actual, condition.getValue());    }
+        return condition.getOperator().check(actual, condition.getValue());
+    }
 
     private Object readProperty(String path) {
         try {

@@ -51,8 +51,12 @@ public final class Comparisons {
     }
 
     public static boolean containsIn(Object actual, String expected) {
-        if (actual == null) {return false;}
-        if (expected == null || expected.isBlank()) {return false;}
+        if (actual == null) {
+            return false;
+        }
+        if (expected == null || expected.isBlank()) {
+            return false;
+        }
 
         actual = unwrapEntity(actual);
 

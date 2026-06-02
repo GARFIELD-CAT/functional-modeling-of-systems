@@ -6,12 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Condition;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.ConditionResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.CreateConditionRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.UpdateConditionRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.Rule;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.condition.ConditionRepository;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Condition;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.rule.RuleRepository;
 
 import java.util.List;

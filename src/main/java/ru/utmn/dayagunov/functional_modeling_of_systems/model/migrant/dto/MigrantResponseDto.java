@@ -1,6 +1,7 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 

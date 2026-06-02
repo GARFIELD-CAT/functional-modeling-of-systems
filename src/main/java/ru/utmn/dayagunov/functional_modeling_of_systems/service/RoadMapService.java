@@ -7,26 +7,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Condition;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.dto.ConditionResponseDto;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.Country;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.PurposeOfVisit;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.dto.MigrantResponseDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.Migrant;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.RoadMap;
+import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.Step;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.dto.RoadMapResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.dto.StepResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.Rule;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.road_map.Step;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.migrant.Migrant;
-import ru.utmn.dayagunov.functional_modeling_of_systems.model.user.User;
+import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.MigrantRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.road_map.RoadMapRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.road_map.StepRepository;
-import ru.utmn.dayagunov.functional_modeling_of_systems.repository.migrant.MigrantRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.repository.rule.RuleRepository;
 
 import java.time.LocalDate;
 import java.util.*;
 
-import static ru.utmn.dayagunov.functional_modeling_of_systems.Constants.*;
+import static ru.utmn.dayagunov.functional_modeling_of_systems.Constants.WARNING_MESSAGE_DOCUMENTS_DEADLINE_EXPIRED;
+import static ru.utmn.dayagunov.functional_modeling_of_systems.Constants.WARNING_MESSAGE_UNABLE_TO_CREATE_ROADMAP;
 
 
 @Service
@@ -40,9 +36,8 @@ public class RoadMapService {
 
     @Transactional
     public RoadMap createRoadMap() {
-//       Делать за 1 запрос через юзер сервис???
-        User user = userService.getCurrentUser();
-        Optional<Migrant> result = migrantRepository.findMigrantByUserId(user.getId());
+        String userLogin = userService.getCurrentUserLogin();
+        Optional<Migrant> result = migrantRepository.findByUserLogin(userLogin);
 
         if (result.isEmpty()) {
             throw new ResponseStatusException(

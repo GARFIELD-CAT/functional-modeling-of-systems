@@ -18,8 +18,7 @@ public class CreateConditionRequestBodyDto {
     @NotNull(message = "ID правила должен быть указан.")
     private Integer ruleId;
 
-    @Schema(requiredMode = REQUIRED, description = "Название проверяемого поля",
-            example = "countryOfCitizenship")
+    @Schema(requiredMode = REQUIRED, description = "Название проверяемого поля", example = "countryOfCitizenship")
     @NotBlank(message = "Поле должно быть указано.")
     @Size(max = 100)
     private String field;

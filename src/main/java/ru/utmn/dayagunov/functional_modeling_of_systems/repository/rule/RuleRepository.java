@@ -8,11 +8,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface RuleRepository extends JpaRepository<Rule, Integer> {
-    /** Правила, действующие на указанную дату. */
+    /**
+     * Правила, действующие на указанную дату.
+     */
     @Query("""
-           SELECT r FROM Rule r
-            WHERE r.effectiveFrom <= :date
-              AND (r.effectiveTo IS NULL OR r.effectiveTo >= :date)
-           """)
+            SELECT r FROM Rule r
+             WHERE r.effectiveFrom <= :date
+               AND (r.effectiveTo IS NULL OR r.effectiveTo >= :date)
+            """)
     List<Rule> findEffectiveOn(LocalDate date);
 }

@@ -8,7 +8,6 @@ import lombok.Setter;
 import ru.utmn.dayagunov.functional_modeling_of_systems.model.condition.Operators;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @Getter
 @Setter

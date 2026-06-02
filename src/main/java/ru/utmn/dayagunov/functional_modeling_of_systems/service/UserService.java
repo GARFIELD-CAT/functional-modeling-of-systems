@@ -58,8 +58,15 @@ public class UserService {
                         String.format("Пользователь с login=%s не найден.", login)));
     }
 
+    public String getCurrentUserLogin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return authentication.getName();
+    }
+
     public void isOwnerOrAdmin(OwnedByUser entity) {
         User currentUser = getCurrentUser();
+        String userLogin = getCurrentUserLogin();
 
         if (UserRoles.ADMIN.getValue().equals(currentUser.getRole())) {
             return;

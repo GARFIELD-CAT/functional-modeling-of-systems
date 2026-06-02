@@ -75,8 +75,8 @@ public class RuleController {
     })
     @GetMapping
     public List<RuleResponseDto> list(
-        @Parameter(description = "Возвращать только действующие правила")
-        @RequestParam(defaultValue = "true") boolean onlyActive
+            @Parameter(description = "Возвращать только действующие правила")
+            @RequestParam(defaultValue = "true") boolean onlyActive
     ) {
         return ruleService.listRules(onlyActive).stream()
                 .map(ruleService::prepareRuleResponseDto)
