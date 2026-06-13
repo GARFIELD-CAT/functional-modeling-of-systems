@@ -23,7 +23,6 @@ public class SecurityConfig {
         return new JpaUserDetailsService(personRepository, bCryptPasswordEncoder);
     }
 
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

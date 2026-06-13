@@ -30,8 +30,9 @@ public class User {
     @Column(length = 100)
     private String lastName;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private String role = UserRoles.USER.getValue();
+    private UserRoles role = UserRoles.USER;
 
     @Column(updatable = false, nullable = false)
     private LocalDateTime created;
@@ -39,7 +40,7 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updated;
 
-    public User(String login, String password, String firstName, String lastName, String role) {
+    public User(String login, String password, String firstName, String lastName, UserRoles role) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;

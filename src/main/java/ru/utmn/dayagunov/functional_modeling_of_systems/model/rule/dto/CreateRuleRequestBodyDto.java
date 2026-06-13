@@ -13,6 +13,16 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 @Getter
 @Setter
 public class CreateRuleRequestBodyDto {
+    @Schema(requiredMode = REQUIRED, description = "Название правила")
+    @NotBlank(message = "Название правила должно быть указано.")
+    @Size(max = 255)
+    private String title;
+
+    @Schema(requiredMode = REQUIRED, description = "Описание правила")
+    @NotBlank(message = "Описание правила должно быть указано.")
+    @Size(max = 4000)
+    private String description;
+
     @Schema(requiredMode = REQUIRED, description = "Что нужно получить (результат)")
     @NotBlank(message = "Требуемый результат должен быть указан.")
     @Size(max = 4000)

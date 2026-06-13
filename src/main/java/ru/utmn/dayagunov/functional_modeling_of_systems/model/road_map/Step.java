@@ -20,6 +20,9 @@ public class Step {
     private Integer id;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private LocalDate deadline = LocalDate.now();
 
     @Column(nullable = false, columnDefinition = "TEXT")

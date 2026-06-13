@@ -1,12 +1,14 @@
-package ru.utmn.dayagunov.functional_modeling_of_systems.model.condition;
+package ru.utmn.dayagunov.functional_modeling_of_systems.service;
 
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
-@NoArgsConstructor
+@Service
+@RequiredArgsConstructor
 public final class Comparisons {
     public static int compare(Object actual, String expected) {
         actual = unwrapEntity(actual);

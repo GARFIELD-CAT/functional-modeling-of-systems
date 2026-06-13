@@ -62,7 +62,6 @@ public class RoadMapService {
         return roadMap;
     }
 
-    @Transactional
     private List<Step> createRoadMapSteps(Migrant migrant) {
         List<Rule> rules = ruleRepository.findEffectiveOn(LocalDate.now());
         List<Step> steps = new ArrayList<>();

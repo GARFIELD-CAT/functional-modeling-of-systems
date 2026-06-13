@@ -1,14 +1,13 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.model.rule.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @Getter
 @Setter
@@ -16,6 +15,14 @@ public class UpdateRuleRequestBodyDto {
     @Schema(description = "ID правила")
     @NotNull(message = "ID правила должен быть указан.")
     private Integer id;
+
+    @Schema(description = "Название правила")
+    @Size(max = 255)
+    private String title;
+
+    @Schema(description = "Описание правила")
+    @Size(max = 4000)
+    private String description;
 
     @Schema(description = "Что нужно получить (результат)")
     @Size(max = 4000)

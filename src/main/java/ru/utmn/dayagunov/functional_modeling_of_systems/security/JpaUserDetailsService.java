@@ -27,7 +27,7 @@ public class JpaUserDetailsService implements UserDetailsService {
             return org.springframework.security.core.userdetails.User
                     .withUsername(user.get().getLogin())
                     .password(user.get().getPassword())
-                    .roles(user.get().getRole())
+                    .roles(user.get().getRole().getValue())
                     .build();
         }
         throw new UsernameNotFoundException(String.format("Пользователь с login=%s не найден.", username));

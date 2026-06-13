@@ -38,12 +38,13 @@ public class MigrantController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @PostMapping
-    public ResponseEntity<Object> createMigrant(
+    public ResponseEntity<MigrantResponseDto> createMigrant(
             @Valid @RequestBody CreateMigrantRequestBodyDto body
     ) {
         Migrant migrant = migrantService.createMigrant(body);
 
-        return new ResponseEntity<>(migrantService.prepareMigrantResponseDto(migrant), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(migrantService.prepareMigrantResponseDto(migrant));
     }
 
     @Operation(summary = "Возвращает профиль мигранта по его id")
@@ -57,12 +58,13 @@ public class MigrantController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getMigrant(
+    public ResponseEntity<MigrantResponseDto> getMigrant(
             @PathVariable("id") Integer id
     ) {
         Migrant migrant = migrantService.getMigrant(id);
 
-        return new ResponseEntity<>(migrantService.prepareMigrantResponseDto(migrant), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(migrantService.prepareMigrantResponseDto(migrant));
     }
 
     @Operation(summary = "Обновляет профиль мигранта по его id")
@@ -76,12 +78,13 @@ public class MigrantController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @PatchMapping
-    public ResponseEntity<Object> updateMigrant(
+    public ResponseEntity<MigrantResponseDto> updateMigrant(
             @Valid @RequestBody UpdateMigrantRequestBodyDto body
     ) {
         Migrant migrant = migrantService.updateMigrant(body);
 
-        return new ResponseEntity<>(migrantService.prepareMigrantResponseDto(migrant), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(migrantService.prepareMigrantResponseDto(migrant));
     }
 
     @Operation(summary = "Удаляет профиль мигранта по его id")
@@ -94,11 +97,10 @@ public class MigrantController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteMigrant(
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMigrant(
             @PathVariable("id") Integer id
     ) {
         migrantService.deleteMigrant(id);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

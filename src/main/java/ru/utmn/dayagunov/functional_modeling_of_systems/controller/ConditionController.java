@@ -40,9 +40,10 @@ public class ConditionController {
     public ResponseEntity<ConditionResponseDto> create(
             @Valid @RequestBody CreateConditionRequestBodyDto body
     ) {
-        Condition created = conditionService.createCondition(body);
+        Condition condition = conditionService.createCondition(body);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(conditionService.prepareConditionResponseDto(created));
+                .body(conditionService.prepareConditionResponseDto(condition));
     }
 
     @Operation(summary = "Возвращает условие по идентификатору")
@@ -56,9 +57,11 @@ public class ConditionController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @GetMapping("/{id}")
-    public ConditionResponseDto get(@PathVariable Integer id) {
+    public ResponseEntity<ConditionResponseDto> get(@PathVariable Integer id) {
         Condition condition = conditionService.getCondition(id);
-        return conditionService.prepareConditionResponseDto(condition);
+
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(conditionService.prepareConditionResponseDto(condition));
     }
 
     @Operation(summary = "Возвращает список из всех условий для указанного правила")
@@ -74,10 +77,11 @@ public class ConditionController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @GetMapping
-    public List<ConditionResponseDto> listByRule(@RequestParam Integer ruleId) {
-        return conditionService.getConditionsByRuleId(ruleId).stream()
+    public ResponseEntity<List<ConditionResponseDto>> listByRule(@RequestParam Integer ruleId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(conditionService.getConditionsByRuleId(ruleId).stream()
                 .map(conditionService::prepareConditionResponseDto)
-                .toList();
+                .toList());
     }
 
     @Operation(summary = "Обновляет условие по его id")
@@ -92,11 +96,13 @@ public class ConditionController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @PatchMapping
-    public ConditionResponseDto update(
+    public ResponseEntity<ConditionResponseDto> update(
             @Valid @RequestBody UpdateConditionRequestBodyDto body
     ) {
-        Condition updated = conditionService.updateCondition(body);
-        return conditionService.prepareConditionResponseDto(updated);
+        Condition condition = conditionService.updateCondition(body);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(conditionService.prepareConditionResponseDto(condition));
     }
 
     @Operation(summary = "Удаляет условие по его id")

@@ -22,7 +22,8 @@ public class CustomExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage());
         }
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errors);
     }
 
     @ExceptionHandler(ResponseStatusException.class)
@@ -30,6 +31,7 @@ public class CustomExceptionHandler {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getReason());
 
-        return new ResponseEntity<>(error, ex.getStatusCode());
+        return ResponseEntity.status(ex.getStatusCode())
+                .body(error);
     }
 }

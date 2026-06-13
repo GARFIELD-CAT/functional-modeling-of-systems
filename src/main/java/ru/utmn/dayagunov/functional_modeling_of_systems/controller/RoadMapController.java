@@ -32,10 +32,11 @@ public class RoadMapController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @PostMapping
-    public ResponseEntity<Object> showRoadMap() {
+    public ResponseEntity<RoadMapResponseDto> showRoadMap() {
         RoadMap roadMap = roadMapService.createRoadMap();
 
-        return new ResponseEntity<>(roadMapService.prepareRoadMapResponseDto(roadMap), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(roadMapService.prepareRoadMapResponseDto(roadMap));
     }
 
     @Operation(summary = "Возвращает дорожную карту по ее id")
@@ -49,11 +50,12 @@ public class RoadMapController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getRoadMap(
+    public ResponseEntity<RoadMapResponseDto> getRoadMap(
             @PathVariable("id") Integer id
     ) {
         RoadMap roadMap = roadMapService.getRoadMap(id);
 
-        return new ResponseEntity<>(roadMapService.prepareRoadMapResponseDto(roadMap), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(roadMapService.prepareRoadMapResponseDto(roadMap));
     }
 }

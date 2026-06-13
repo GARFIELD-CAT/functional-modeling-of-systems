@@ -40,10 +40,10 @@ public class RuleController {
     public ResponseEntity<RuleResponseDto> create(
             @Valid @RequestBody CreateRuleRequestBodyDto body
     ) {
-        Rule created = ruleService.createRule(body);
+        Rule rule = ruleService.createRule(body);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ruleService.prepareRuleResponseDto(created));
+                .body(ruleService.prepareRuleResponseDto(rule));
     }
 
     @Operation(summary = "Возвращает правило по его id")
@@ -57,9 +57,11 @@ public class RuleController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @GetMapping("/{id}")
-    public RuleResponseDto get(@PathVariable Integer id) {
+    public ResponseEntity<RuleResponseDto> get(@PathVariable Integer id) {
         Rule rule = ruleService.getRule(id);
-        return ruleService.prepareRuleResponseDto(rule);
+
+        return  ResponseEntity.status(HttpStatus.OK)
+                .body(ruleService.prepareRuleResponseDto(rule));
     }
 
     @Operation(summary = "Возвращает список правил")
@@ -74,13 +76,14 @@ public class RuleController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @GetMapping
-    public List<RuleResponseDto> list(
+    public ResponseEntity<List<RuleResponseDto>> list(
             @Parameter(description = "Возвращать только действующие правила")
             @RequestParam(defaultValue = "true") boolean onlyActive
     ) {
-        return ruleService.listRules(onlyActive).stream()
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ruleService.listRules(onlyActive).stream()
                 .map(ruleService::prepareRuleResponseDto)
-                .toList();
+                .toList());
     }
 
     @Operation(summary = "Обновляет правило по его id")
@@ -95,11 +98,13 @@ public class RuleController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @PatchMapping
-    public RuleResponseDto update(
+    public ResponseEntity<RuleResponseDto> update(
             @Valid @RequestBody UpdateRuleRequestBodyDto body
     ) {
-        Rule updated = ruleService.updateRule(body);
-        return ruleService.prepareRuleResponseDto(updated);
+        Rule rule = ruleService.updateRule(body);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ruleService.prepareRuleResponseDto(rule));
     }
 
     @Operation(summary = "Удаляет правило по его id",

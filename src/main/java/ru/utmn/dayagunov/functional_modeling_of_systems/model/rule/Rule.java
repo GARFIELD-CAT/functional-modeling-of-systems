@@ -22,6 +22,12 @@ public class Rule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String description;
+
     // Что нужно получить.
     @Column(nullable = false, columnDefinition = "TEXT")
     private String requiredResult;

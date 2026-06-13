@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class StepResponseDto {
+    private String title;
     private LocalDate deadline;
     private String message;
 }

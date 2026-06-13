@@ -37,12 +37,13 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @PostMapping
-    public ResponseEntity<Object> createUser(
+    public ResponseEntity<UserResponseDto> createUser(
             @Valid @RequestBody CreateUserRequestBodyDto body
     ) {
         User user = userService.createUser(body.getLogin(), body.getPassword());
 
-        return new ResponseEntity<>(userService.prepareUserResponseDto(user), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.prepareUserResponseDto(user));
     }
 
     @Operation(summary = "Возвращает пользователя по его id")
@@ -56,12 +57,12 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUser(
+    public ResponseEntity<UserResponseDto> getUser(
             @PathVariable("id") Integer id
     ) {
         User user = userService.getUser(id);
 
-        return new ResponseEntity<>(userService.prepareUserResponseDto(user), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(userService.prepareUserResponseDto(user));
     }
-
 }

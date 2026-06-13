@@ -66,9 +66,8 @@ public class UserService {
 
     public void isOwnerOrAdmin(OwnedByUser entity) {
         User currentUser = getCurrentUser();
-        String userLogin = getCurrentUserLogin();
 
-        if (UserRoles.ADMIN.getValue().equals(currentUser.getRole())) {
+        if (UserRoles.ADMIN.equals(currentUser.getRole())) {
             return;
         }
 

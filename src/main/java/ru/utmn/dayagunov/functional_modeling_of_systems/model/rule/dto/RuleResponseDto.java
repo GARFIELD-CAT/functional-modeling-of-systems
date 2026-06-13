@@ -11,6 +11,8 @@ import java.util.List;
 @Setter
 public class RuleResponseDto {
     private Integer id;
+    private String title;
+    private String description;
     private String requiredResult;
     private String requiredAction;
     private Integer period;

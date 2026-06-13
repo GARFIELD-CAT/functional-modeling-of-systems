@@ -10,5 +10,4 @@ public class FunctionalModelingOfSystemsApplication {
         SpringApplication.run(FunctionalModelingOfSystemsApplication.class, args);
         System.out.println("Ok");
     }
-
 }
