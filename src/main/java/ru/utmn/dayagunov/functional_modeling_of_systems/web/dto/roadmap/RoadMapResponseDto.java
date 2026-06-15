@@ -8,6 +8,5 @@ import java.util.List;
 @Getter
 @Setter
 public class RoadMapResponseDto {
-    private Integer id;
     private List<StepResponseDto> steps;
 }

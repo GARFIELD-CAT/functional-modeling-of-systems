@@ -1,16 +1,11 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.domain.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant.Migrant;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.roadmap.RoadMap;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.roadmap.Step;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Rule;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.roadmap.RoadMapRepository;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.roadmap.StepRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.rule.RuleRepository;
 
 import java.time.LocalDate;
@@ -23,38 +18,15 @@ import static ru.utmn.dayagunov.functional_modeling_of_systems.infrastructure.ut
 @Service
 @RequiredArgsConstructor
 public class RoadMapService {
-    private final RoadMapRepository roadMapRepository;
     private final RuleRepository ruleRepository;
-    private final StepRepository stepRepository;
     private final MigrantService migrantService;
 
-    @Transactional
     public RoadMap createRoadMap() {
         Migrant migrant = migrantService.getCurrentMigrant();
-
-        //TODO удалить. Карты в базе не храним!!!!
-        if (migrant.getRoadMap() != null) {
-            migrant.setRoadMap(null);
-            migrantService.save(migrant);
-        }
-
         RoadMap roadMap = new RoadMap();
         roadMap.setSteps(createSteps(migrant));
-        roadMapRepository.save(roadMap);
-
-        migrant.setRoadMap(roadMap);
-        migrantService.save(migrant);
 
         return roadMap;
-    }
-
-    @Transactional(readOnly = true)
-    public RoadMap getRoadMap(Integer id) {
-        return roadMapRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, String.format("Дорожная карта с id=%d не существует", id)
-                )
-        );
     }
 
     private List<Step> createSteps(Migrant migrant) {
@@ -71,15 +43,13 @@ public class RoadMapService {
             String message = generateMessage(rule, deadline);
 
             if (seenRules.add(rule.getId())) {
-                steps.add(Step.fromRule(rule, deadline, message));
+                steps.add(new Step(rule.getTitle(), deadline, message));
             }
         }
 
         if (steps.isEmpty()) {
-            steps.add(Step.notice("Дорожная карта", WARNING_MESSAGE_UNABLE_TO_CREATE_ROADMAP));
+            steps.add(new Step("Дорожная карта", WARNING_MESSAGE_UNABLE_TO_CREATE_ROADMAP));
         }
-
-        stepRepository.saveAll(steps);
 
         return steps;
     }

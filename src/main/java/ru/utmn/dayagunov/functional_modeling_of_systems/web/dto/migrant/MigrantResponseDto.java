@@ -13,7 +13,6 @@ public class MigrantResponseDto {
     private Integer plannedDurationOfStay;
     private String countryOfCitizenship;
     private String purposeOfVisit;
-    private Integer roadMapId;
     private boolean hqsOrFamilyMember;
     private boolean hasFingerprinting;
     private boolean hasPhotoRegistration;

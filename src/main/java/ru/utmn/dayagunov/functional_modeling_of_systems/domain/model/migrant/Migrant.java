@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.BeanWrapperImpl;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Condition;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.roadmap.RoadMap;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.OwnedByUser;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.User;
 
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"user", "countryOfCitizenship", "purposeOfVisit", "roadMap"})
+@ToString(exclude = {"user", "countryOfCitizenship", "purposeOfVisit"})
 @EqualsAndHashCode(of = "id")
 @Table(name = "migrants")
 public class Migrant implements OwnedByUser {
@@ -41,10 +40,6 @@ public class Migrant implements OwnedByUser {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purpose_of_visit_id", nullable = false)
     private PurposeOfVisit purposeOfVisit;
-
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "road_map_id")
-    private RoadMap roadMap;
 
     // Миграционные статусы (Да/Нет)
     @Column(nullable = false)

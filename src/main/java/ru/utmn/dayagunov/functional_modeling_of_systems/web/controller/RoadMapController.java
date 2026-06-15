@@ -40,24 +40,4 @@ public class RoadMapController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(roadMapMapper.toResponseDto(roadMap));
     }
-
-    @Operation(summary = "Возвращает дорожную карту по ее id")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Дорожная карта успешно найдена",
-                    content = @Content(schema = @Schema(implementation = RoadMapResponseDto.class))
-            ),
-            @ApiResponse(responseCode = "404", description = "Дорожная карта не найдена"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
-    })
-    @GetMapping("/{id}")
-    public ResponseEntity<RoadMapResponseDto> getRoadMap(
-            @PathVariable("id") Integer id
-    ) {
-        RoadMap roadMap = roadMapService.getRoadMap(id);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(roadMapMapper.toResponseDto(roadMap));
-    }
 }
