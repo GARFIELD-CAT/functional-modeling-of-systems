@@ -1,11 +1,13 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
@@ -43,4 +45,9 @@ public class CreateRuleRequestBodyDto {
             example = "null")
     @FutureOrPresent(message = "Дата окончания действия правила не может быть в прошлом.")
     private LocalDate effectiveTo;
+
+    @Valid
+    @Schema(requiredMode = NOT_REQUIRED, description = "Условия применимости правила.")
+    @Size(min = 1, message = "Список условий не может быть пустым.")
+    private List<RuleConditionDto> conditions;
 }

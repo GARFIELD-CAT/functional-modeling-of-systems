@@ -1,4 +1,4 @@
-package ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.condition;
+package ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -7,20 +7,17 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Operators;
+import ru.utmn.dayagunov.functional_modeling_of_systems.web.validation.MigrantField;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @Getter
 @Setter
-public class CreateConditionRequestBodyDto {
-
-    @Schema(requiredMode = REQUIRED, description = "ID правила, к которому относится условие")
-    @NotNull(message = "ID правила должен быть указан.")
-    private Integer ruleId;
-
+public class RuleConditionDto {
     @Schema(requiredMode = REQUIRED, description = "Название проверяемого поля", example = "countryOfCitizenship")
     @NotBlank(message = "Поле должно быть указано.")
     @Size(max = 100)
+    @MigrantField
     private String field;
 
     @Schema(requiredMode = REQUIRED, description = "Оператор сравнения. \n Возможные варианты: EQ - равно, NO_EQ - не равно" +

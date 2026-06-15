@@ -2,7 +2,6 @@ package ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.condition.ConditionResponseDto;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -46,13 +46,25 @@ public class Rule {
     // NULL = бессрочно
     private LocalDate effectiveTo;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "rule_id")
+    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Condition> conditions = new ArrayList<>();
 
     @PrePersist
     void onCreate() {
         effectiveFrom = LocalDate.now();
+    }
+
+    public void addCondition(Condition condition) {
+        condition.setRule(this);
+        conditions.add(condition);
+    }
+
+    public void replaceConditions(List<Condition> newConditions) {
+        conditions.clear();
+
+        if (newConditions != null) {
+            newConditions.forEach(this::addCondition);
+        }
     }
 
     public boolean matches(Migrant migrant) {
