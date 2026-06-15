@@ -55,10 +55,6 @@ public class Rule {
         effectiveFrom = LocalDate.now();
     }
 
-    /**
-     * Information Expert: правило владеет своими условиями, поэтому само и решает,
-     * подходит ли оно конкретному мигранту (все условия должны выполниться).
-     */
     public boolean matches(Migrant migrant) {
         for (Condition condition : conditions) {
             if (!migrant.check(condition)) {
@@ -68,11 +64,7 @@ public class Rule {
         return true;
     }
 
-    /**
-     * Information Expert: правило знает свой срок (period), поэтому само считает
-     * крайнюю дату относительно даты въезда мигранта.
-     */
-    public LocalDate deadlineFor(Migrant migrant) {
+    public LocalDate calculateDeadline(Migrant migrant) {
         LocalDate base = migrant.getEntryDate() != null ? migrant.getEntryDate() : LocalDate.now();
         return base.plusDays(period);
     }

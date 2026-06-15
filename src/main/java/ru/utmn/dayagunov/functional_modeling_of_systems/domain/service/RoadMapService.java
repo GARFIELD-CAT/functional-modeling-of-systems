@@ -60,17 +60,17 @@ public class RoadMapService {
     private List<Step> createSteps(Migrant migrant) {
         List<Rule> rules = ruleRepository.findEffectiveOn(LocalDate.now());
         List<Step> steps = new ArrayList<>();
-        Set<String> seenMessages = new HashSet<>();
+        Set<Integer> seenRules = new HashSet<>();
 
         for (Rule rule : rules) {
             if (!rule.matches(migrant)) {
                 continue;
             }
 
-            LocalDate deadline = rule.deadlineFor(migrant);
+            LocalDate deadline = rule.calculateDeadline(migrant);
             String message = generateMessage(rule, deadline);
 
-            if (seenMessages.add(message)) {
+            if (seenRules.add(rule.getId())) {
                 steps.add(Step.fromRule(rule, deadline, message));
             }
         }
@@ -86,8 +86,8 @@ public class RoadMapService {
 
     private String generateMessage(Rule rule, LocalDate deadline) {
         String message = String.format(
-                "Что нужно получить: %s\nЧто нужно сделать: %s\nКрайний срок: %s",
-                rule.getRequiredResult(), rule.getRequiredAction(), deadline
+                "Что нужно получить: %s\nЧто нужно сделать: %s",
+                rule.getRequiredResult(), rule.getRequiredAction()
         );
 
         if (deadline.isBefore(LocalDate.now())) {
