@@ -6,12 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Condition;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Rule;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.rule.RuleRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule.CreateRuleRequestBodyDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule.RuleConditionDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule.UpdateRuleRequestBodyDto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static ru.utmn.dayagunov.functional_modeling_of_systems.infrastructure.util.BeanCopyUtils.getNullPropertyNames;
@@ -24,7 +28,8 @@ public class RuleService {
     @Transactional
     public Rule createRule(CreateRuleRequestBodyDto body) {
         Rule rule = new Rule();
-        BeanUtils.copyProperties(body, rule);
+        BeanUtils.copyProperties(body, rule, "conditions");
+        rule.replaceConditions(buildConditions(body.getConditions()));
 
         return ruleRepository.save(rule);
     }
@@ -32,7 +37,14 @@ public class RuleService {
     @Transactional
     public Rule updateRule(UpdateRuleRequestBodyDto body) {
         Rule rule = findRuleById(body.getId());
-        BeanUtils.copyProperties(body, rule, getNullPropertyNames(body));
+
+        List<String> ignore = new ArrayList<>(Arrays.asList(getNullPropertyNames(body)));
+        ignore.add("conditions");
+        BeanUtils.copyProperties(body, rule, ignore.toArray(new String[0]));
+
+        if (body.getConditions() != null) {
+            rule.replaceConditions(buildConditions(body.getConditions()));
+        }
 
         return ruleRepository.save(rule);
     }
@@ -55,6 +67,27 @@ public class RuleService {
     public void deleteRule(Integer id) {
         Rule rule = findRuleById(id);
         ruleRepository.delete(rule);
+    }
+
+    private List<Condition> buildConditions(List<RuleConditionDto> dtos) {
+        List<Condition> conditions = new ArrayList<>();
+
+        if (dtos != null) {
+            for (RuleConditionDto dto : dtos) {
+                conditions.add(toCondition(dto));
+            }
+        }
+
+        return conditions;
+    }
+
+    private Condition toCondition(RuleConditionDto dto) {
+        Condition condition = new Condition();
+        condition.setField(dto.getField());
+        condition.setOperator(dto.getOperator());
+        condition.setValue(dto.getValue());
+
+        return condition;
     }
 
     private Rule findRuleById(Integer id) {

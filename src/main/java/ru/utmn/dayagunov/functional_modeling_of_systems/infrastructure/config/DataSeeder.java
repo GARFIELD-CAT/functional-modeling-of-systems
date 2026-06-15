@@ -10,7 +10,6 @@ import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Operat
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Rule;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.User;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.UserRoles;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.rule.ConditionRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.rule.RuleRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.user.UserRepository;
 
@@ -21,7 +20,6 @@ public class DataSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RuleRepository ruleRepository;
-    private final ConditionRepository conditionRepository;
 
     @Override
     public void run(String... args) {
@@ -48,44 +46,45 @@ public class DataSeeder implements CommandLineRunner {
             return;
         }
 
-        Rule medExam = saveRule(
+        ruleRepository.save(buildRule(
                 "Медицинское освидетельствование",
                 "Иностранным гражданам необходимо пройти медицинское освидетельствование в течение 30 дней со дня въезда.",
                 "Результат медицинского освидетельствования",
                 "Обратиться в уполномоченную медицинскую организацию",
-                30
-        );
-        saveCondition(medExam, "hasMedicalExamination", Operators.EQ, "false");
+                30, "hasMedicalExamination", "false"));
 
-        Rule medInsurance = saveRule(
+        ruleRepository.save(buildRule(
                 "Полис ОМС/ДМС",
                 "Для законного пребывания требуется действующий полис медицинского страхования.",
                 "Полис обязательного или добровольного медицинского страхования",
                 "Обратиться в любую страховую компанию по месту пребывания",
-                30
-        );
-        saveCondition(medInsurance, "hasMedicalInsurance", Operators.EQ, "false");
+                30, "hasMedicalInsurance", "false"));
 
         log.info("Созданы демонстрационные правила: {} шт.", ruleRepository.count());
     }
 
-    private Rule saveRule(String title, String description,
-                          String requiredResult, String requiredAction, int period) {
+    private Rule buildRule(
+            String title,
+            String description,
+            String requiredResult,
+            String requiredAction,
+            int period,
+            String field,
+            String value
+    ) {
         Rule rule = new Rule();
         rule.setTitle(title);
         rule.setDescription(description);
         rule.setRequiredResult(requiredResult);
         rule.setRequiredAction(requiredAction);
         rule.setPeriod(period);
-        return ruleRepository.save(rule);
-    }
 
-    private void saveCondition(Rule rule, String field, Operators operator, String value) {
         Condition condition = new Condition();
-        condition.setRule(rule);
         condition.setField(field);
-        condition.setOperator(operator);
+        condition.setOperator(Operators.EQ);
         condition.setValue(value);
-        conditionRepository.save(condition);
+        rule.addCondition(condition);
+
+        return rule;
     }
 }
