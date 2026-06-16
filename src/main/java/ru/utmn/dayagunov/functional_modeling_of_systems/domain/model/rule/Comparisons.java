@@ -1,12 +1,9 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule;
 
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
-@NoArgsConstructor
 public final class Comparisons {
     public static int compare(Object actual, String expected) {
         actual = unwrapEntity(actual);

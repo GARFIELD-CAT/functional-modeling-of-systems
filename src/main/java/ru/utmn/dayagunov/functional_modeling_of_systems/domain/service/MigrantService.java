@@ -9,12 +9,12 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant.Country;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant.Migrant;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant.PurposeOfVisit;
-import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.migrant.CreateMigrantRequestBodyDto;
-import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.migrant.UpdateMigrantRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.User;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.migrant.CountryRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.migrant.MigrantRepository;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.migrant.PurposeOfVisitRepository;
+import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.migrant.CreateMigrantRequestBodyDto;
+import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.migrant.UpdateMigrantRequestBodyDto;
 
 import static ru.utmn.dayagunov.functional_modeling_of_systems.infrastructure.util.BeanCopyUtils.getNullPropertyNames;
 
@@ -84,11 +84,6 @@ public class MigrantService {
                         HttpStatus.NOT_FOUND, "Профиль мигранта для текущего пользователя не найден."
                 )
         );
-    }
-
-    @Transactional
-    public Migrant save(Migrant migrant) {
-        return migrantRepository.save(migrant);
     }
 
     @Transactional

@@ -1,6 +1,5 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.web.mapper;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Condition;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
 public class RuleMapper {
     public RuleResponseDto toResponseDto(Rule rule) {
         RuleResponseDto dto = new RuleResponseDto();

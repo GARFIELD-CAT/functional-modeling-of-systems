@@ -16,8 +16,7 @@ public class Step {
     private String message;
 
     public Step(String title, String message) {
-        Step step = new Step();
-        step.title = title;
-        step.message = message;
+        this.title = title;
+        this.message = message;
     }
 }

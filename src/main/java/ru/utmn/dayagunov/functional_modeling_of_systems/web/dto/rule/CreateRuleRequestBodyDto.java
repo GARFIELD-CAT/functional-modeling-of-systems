@@ -47,7 +47,8 @@ public class CreateRuleRequestBodyDto {
     private LocalDate effectiveTo;
 
     @Valid
-    @Schema(requiredMode = NOT_REQUIRED, description = "Условия применимости правила.")
-    @Size(min = 1, max=20, message = "Список условий не может быть пустым.")
+    @Schema(requiredMode = REQUIRED, description = "Условия применимости правила.")
+    @Size(min = 1, max=20, message = "Размер списка условий должен входить в допуcтимый диапазон.")
+    @NotEmpty(message = "Список условий не может быть пустым.")
     private List<RuleConditionDto> conditions;
 }
