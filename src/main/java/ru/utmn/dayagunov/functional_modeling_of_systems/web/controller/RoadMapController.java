@@ -5,16 +5,19 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.roadmap.RoadMap;
-import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.roadmap.RoadMapResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.service.RoadMapService;
+import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.roadmap.RoadMapResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.mapper.RoadMapMapper;
 
-
+@Tag(name = "Дорожные карты", description = "Создание дорожных карт (Доступно USER и ADMIN)")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/road-maps")
@@ -29,9 +32,9 @@ public class RoadMapController {
                     description = "Дорожная карта успешно создана",
                     content = @Content(schema = @Schema(implementation = RoadMapResponseDto.class))
             ),
-            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса"),
-            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @PostMapping
     public ResponseEntity<RoadMapResponseDto> showRoadMap() {

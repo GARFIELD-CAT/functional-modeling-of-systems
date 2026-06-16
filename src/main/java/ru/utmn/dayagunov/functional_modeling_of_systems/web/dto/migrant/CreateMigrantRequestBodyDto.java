@@ -17,8 +17,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 @Setter
 public class CreateMigrantRequestBodyDto {
     @Schema(requiredMode = REQUIRED,
-            description = "Дата въезда в РФ",
-            example = "2026-01-01")
+            description = "Дата въезда в РФ")
     @NotNull(message = "Дата въезда должна быть указана.")
     @PastOrPresent(message = "Дата въезда не может быть в будущем.")
     private LocalDate entryDate;
@@ -26,7 +25,8 @@ public class CreateMigrantRequestBodyDto {
     @Schema(requiredMode = REQUIRED,
             description = "Планируемый срок пребывания в днях",
             example = "90",
-            minimum = "1")
+            minimum = "1",
+            maximum = "1100")
     @NotNull(message = "Планируемый срок пребывания должен быть указан.")
     @Positive(message = "Срок пребывания должен быть положительным числом.")
     private Integer plannedDurationOfStay;

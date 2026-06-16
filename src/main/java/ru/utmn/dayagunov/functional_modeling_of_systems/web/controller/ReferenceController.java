@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import ru.utmn.dayagunov.functional_modeling_of_systems.web.mapper.ReferenceMapp
 
 import java.util.List;
 
+@Tag(name = "Каталоги", description = "Просмотр доступных каталогов (Доступно всем пользователям)")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -34,7 +36,7 @@ public class ReferenceController {
                     content = @Content(array = @ArraySchema(
                             schema = @Schema(implementation = CountryResponseDto.class)))
             ),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @GetMapping("/countries")
     public ResponseEntity<List<CountryResponseDto>> getCountries() {
@@ -52,7 +54,7 @@ public class ReferenceController {
                     content = @Content(array = @ArraySchema(
                             schema = @Schema(implementation = PurposeOfVisitResponseDto.class)))
             ),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @GetMapping("/purposes-of-visit")
     public ResponseEntity<List<PurposeOfVisitResponseDto>> getPurposesOfVisit() {

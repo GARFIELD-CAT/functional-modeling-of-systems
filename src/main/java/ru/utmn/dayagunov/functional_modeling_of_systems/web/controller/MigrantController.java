@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant.Migrant;
+import ru.utmn.dayagunov.functional_modeling_of_systems.domain.service.MigrantService;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.migrant.CreateMigrantRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.migrant.MigrantResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.migrant.UpdateMigrantRequestBodyDto;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.service.MigrantService;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.mapper.MigrantMapper;
 
-
+@Tag(name = "Профили мигрантов", description = "Создание профилей мигрантов и управление ими (Доступно USER и ADMIN)")
 @RestController
 @Validated
 @RequiredArgsConstructor
@@ -34,10 +35,10 @@ public class MigrantController {
                     description = "Профиль мигранта успешно создан",
                     content = @Content(schema = @Schema(implementation = MigrantResponseDto.class))
             ),
-            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса"),
-            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
-            @ApiResponse(responseCode = "409", description = "Профиль мигранта для текущего пользователя уже существует"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Профиль мигранта для текущего пользователя уже существует", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @PostMapping
     public ResponseEntity<MigrantResponseDto> createMigrant(
@@ -56,8 +57,8 @@ public class MigrantController {
                     description = "Профиль мигранта успешно найден",
                     content = @Content(schema = @Schema(implementation = MigrantResponseDto.class))
             ),
-            @ApiResponse(responseCode = "404", description = "Профиль мигранта не найден"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "404", description = "Профиль мигранта не найден", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @GetMapping("/{id}")
     public ResponseEntity<MigrantResponseDto> getMigrant(
@@ -76,8 +77,9 @@ public class MigrantController {
                     description = "Профиль мигранта успешно обновлен",
                     content = @Content(schema = @Schema(implementation = MigrantResponseDto.class))
             ),
-            @ApiResponse(responseCode = "404", description = "Профиль мигранта не найден"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Профиль мигранта не найден", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @PatchMapping
     public ResponseEntity<MigrantResponseDto> updateMigrant(
@@ -91,9 +93,9 @@ public class MigrantController {
 
     @Operation(summary = "Удаляет профиль мигранта по его id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Профиль мигранта успешно удален"),
-            @ApiResponse(responseCode = "404", description = "Профиль мигранта не найден"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "204", description = "Профиль мигранта успешно удален", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Профиль мигранта не найден", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -101,5 +103,20 @@ public class MigrantController {
             @PathVariable("id") Integer id
     ) {
         migrantService.deleteMigrant(id);
+    }
+
+    @Operation(summary = "Возвращает профиль мигранта для текущего пользователя",
+            description = "Возвращает профиль мигранта, привязанный к текущему пользователю.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Профиль мигранта для текущего пользователя",
+                    content = @Content(schema = @Schema(implementation = MigrantResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "Профиль мигранта для текущего пользователя не найден", content = @Content)
+    })
+    @GetMapping("/me")
+    public ResponseEntity<MigrantResponseDto> getCurrentMigrant() {
+        Migrant migrant = migrantService.getCurrentMigrant();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(migrantMapper.toResponseDto(migrant));
     }
 }

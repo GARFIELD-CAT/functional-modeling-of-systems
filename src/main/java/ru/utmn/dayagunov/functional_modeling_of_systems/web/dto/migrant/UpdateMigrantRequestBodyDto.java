@@ -10,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 
 @Getter
@@ -19,61 +20,76 @@ public class UpdateMigrantRequestBodyDto {
     @NotNull(message = "ID профиля мигранта должен быть указан.")
     private Integer id;
 
-    @Schema(description = "Дата въезда в РФ")
+    @Schema(requiredMode = NOT_REQUIRED, description = "Дата въезда в РФ")
     @PastOrPresent(message = "Дата въезда не может быть в будущем.")
     private LocalDate entryDate;
 
-    @Schema(description = "Планируемый срок пребывания в днях")
+    @Schema(requiredMode = NOT_REQUIRED,
+            description = "Планируемый срок пребывания в днях",
+            example = "90",
+            minimum = "1",
+            maximum = "1100")
     @Positive(message = "Срок пребывания должен быть положительным числом.")
     private Integer plannedDurationOfStay;
 
-    @Schema(description = "ID страны гражданства")
+    @Schema(requiredMode = NOT_REQUIRED, description = "ID страны гражданства", example = "1")
     private Integer countryOfCitizenshipId;
 
-    @Schema(description = "ID цели въезда")
+    @Schema(requiredMode = NOT_REQUIRED, description = "ID цели въезда", example = "1")
     private Integer purposeOfVisitId;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Высококвалифицированный специалист или член его семьи")
+            description = "Высококвалифицированный специалист или член его семьи",
+            defaultValue = "null")
     private Boolean hqsOrFamilyMember;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Пройдена дактилоскопия в РФ")
+            description = "Пройдена дактилоскопия в РФ",
+            defaultValue = "null")
     private Boolean hasFingerprinting;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Пройдено фотографирование в РФ")
+            description = "Пройдено фотографирование в РФ",
+            defaultValue = "null")
     private Boolean hasPhotoRegistration;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Состояли ли ранее на миграционном учёте")
+            description = "Состояли ли ранее на миграционном учёте",
+            defaultValue = "null")
     private Boolean hasMigrationRegistration;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Имеется полис ОМС или ДМС")
+            description = "Имеется полис ОМС или ДМС",
+            defaultValue = "null")
     private Boolean hasMedicalInsurance;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Пройдено медицинское освидетельствование")
+            description = "Пройдено медицинское освидетельствование",
+            defaultValue = "null")
     private Boolean hasMedicalExamination;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Имеется действующий сертификат о владении русским языком")
+            description = "Имеется действующий сертификат о владении русским языком",
+            defaultValue = "null")
     private Boolean hasRussianLanguageCert;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Имеется ИНН, полученный в РФ")
+            description = "Имеется ИНН, полученный в РФ",
+            defaultValue = "null")
     private Boolean hasInn;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Участник госпрограммы переселения соотечественников")
+            description = "Участник госпрограммы переселения соотечественников",
+            defaultValue = "null")
     private Boolean resettlementParticipant;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Имеется аттестат об образовании СССР до 1991 года")
+            description = "Имеется аттестат об образовании СССР до 1991 года",
+            defaultValue = "null")
     private Boolean hasUssrCertificate;
 
     @Schema(requiredMode = NOT_REQUIRED,
-            description = "Имеется диплом об образовании, полученный в РФ")
+            description = "Имеется диплом об образовании, полученный в РФ",
+            defaultValue = "null")
     private Boolean hasRussianDiploma;
 }

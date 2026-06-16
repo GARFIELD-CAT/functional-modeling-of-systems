@@ -34,11 +34,24 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth
+                                // Правила
+                                .requestMatchers("/admin/rules/**").hasRole("ADMIN")
+                                // Админка
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
+                                // Пользователи
                                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                                .requestMatchers("/api/rules/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/users/me").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/users/**").hasRole("ADMIN")
+                                // Мигранты
+                                .requestMatchers("/api/migrants/**").hasAnyRole("ADMIN", "USER")
+                                // Дорожные карты
+                                .requestMatchers(HttpMethod.POST, "/api/road-maps/**").hasAnyRole("ADMIN", "USER")
+                                // Каталоги
                                 .requestMatchers(HttpMethod.GET, "/api/countries").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/purposes-of-visit").permitAll()
+                                // Документация
+                                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                                // Остальные ручки
                                 .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
                                 .anyRequest().authenticated()
                 )

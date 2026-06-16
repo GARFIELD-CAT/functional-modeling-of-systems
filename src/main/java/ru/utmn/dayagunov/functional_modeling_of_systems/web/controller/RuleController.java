@@ -7,22 +7,24 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Rule;
+import ru.utmn.dayagunov.functional_modeling_of_systems.domain.service.RuleService;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule.CreateRuleRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule.RuleResponseDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule.UpdateRuleRequestBodyDto;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.service.RuleService;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.mapper.RuleMapper;
 
 import java.util.List;
 
+@Tag(name = "Правила", description = "Создание правил с условиями и управление ими (Доступно ADMIN)")
 @RestController
-@RequestMapping("/api/rules")
+@RequestMapping("/admin/rules")
 @RequiredArgsConstructor
 public class RuleController {
     private final RuleService ruleService;
@@ -35,8 +37,8 @@ public class RuleController {
                     description = "Правило успешно создано",
                     content = @Content(schema = @Schema(implementation = RuleResponseDto.class))
             ),
-            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @PostMapping
     public ResponseEntity<RuleResponseDto> create(
@@ -55,8 +57,8 @@ public class RuleController {
                     description = "Правило найдено",
                     content = @Content(schema = @Schema(implementation = RuleResponseDto.class))
             ),
-            @ApiResponse(responseCode = "404", description = "Правило с указанным id не найдено"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "404", description = "Правило с указанным id не найдено", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @GetMapping("/{id}")
     public ResponseEntity<RuleResponseDto> get(@PathVariable Integer id) {
@@ -74,8 +76,8 @@ public class RuleController {
                     content = @Content(array = @ArraySchema(
                             schema = @Schema(implementation = RuleResponseDto.class)))
             ),
-            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @GetMapping
     public ResponseEntity<List<RuleResponseDto>> list(
@@ -95,9 +97,9 @@ public class RuleController {
                     description = "Правило успешно обновлено",
                     content = @Content(schema = @Schema(implementation = RuleResponseDto.class))
             ),
-            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса"),
-            @ApiResponse(responseCode = "404", description = "Правило с указанным id не найдено"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "400", description = "Некорректные данные запроса", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Правило с указанным id не найдено", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @PatchMapping
     public ResponseEntity<RuleResponseDto> update(
@@ -112,9 +114,9 @@ public class RuleController {
     @Operation(summary = "Удаляет правило по его id",
             description = "Связанные условия также удаляются.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Правило успешно удалено"),
-            @ApiResponse(responseCode = "404", description = "Правило с указанным id не найдено"),
-            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+            @ApiResponse(responseCode = "204", description = "Правило успешно удалено", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Правило с указанным id не найдено", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

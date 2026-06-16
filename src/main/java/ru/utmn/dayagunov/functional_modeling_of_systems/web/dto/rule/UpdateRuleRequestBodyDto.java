@@ -45,6 +45,6 @@ public class UpdateRuleRequestBodyDto {
 
     @Valid
     @Schema(description = "Полный новый список условий. null = условия не трогаем")
-    @Size(min = 1, message = "Список условий не может быть пустым.")
+    @Size(min = 1, max=20, message = "Список условий не может быть пустым.")
     private List<RuleConditionDto> conditions;
 }

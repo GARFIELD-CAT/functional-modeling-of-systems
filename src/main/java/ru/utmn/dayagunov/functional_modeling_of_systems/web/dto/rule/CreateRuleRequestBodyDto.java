@@ -48,6 +48,6 @@ public class CreateRuleRequestBodyDto {
 
     @Valid
     @Schema(requiredMode = NOT_REQUIRED, description = "Условия применимости правила.")
-    @Size(min = 1, message = "Список условий не может быть пустым.")
+    @Size(min = 1, max=20, message = "Список условий не может быть пустым.")
     private List<RuleConditionDto> conditions;
 }
