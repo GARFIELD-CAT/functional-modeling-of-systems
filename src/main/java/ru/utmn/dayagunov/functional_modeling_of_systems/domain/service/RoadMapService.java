@@ -31,8 +31,7 @@ public class RoadMapService {
 
     private List<Step> createSteps(Migrant migrant) {
         List<Rule> rules = ruleRepository.findEffectiveOn(LocalDate.now());
-        List<Step> steps = new ArrayList<>();
-        Set<Integer> seenRules = new HashSet<>();
+        Map<String, Step> messages = new LinkedHashMap<>();
 
         for (Rule rule : rules) {
             if (!rule.matches(migrant)) {
@@ -41,11 +40,15 @@ public class RoadMapService {
 
             LocalDate deadline = rule.calculateDeadline(migrant);
             String message = generateMessage(rule, deadline);
+            Step candidate = new Step(rule.getTitle(), deadline, message);
 
-            if (seenRules.add(rule.getId())) {
-                steps.add(new Step(rule.getTitle(), deadline, message));
-            }
+            // Если одинаковые сообщения у шагов, то оставляем шаг с ближайшим дедлайном
+            String key = String.format("%s: %s", rule.getRequiredAction(), rule.getRequiredResult());
+            messages.merge(key, candidate, (existing, incoming) ->
+                    incoming.getDeadline().isBefore(existing.getDeadline()) ? incoming : existing);
         }
+
+        List<Step> steps = new ArrayList<>(messages.values());
 
         if (steps.isEmpty()) {
             steps.add(new Step("Дорожная карта", WARNING_MESSAGE_UNABLE_TO_CREATE_ROADMAP));
