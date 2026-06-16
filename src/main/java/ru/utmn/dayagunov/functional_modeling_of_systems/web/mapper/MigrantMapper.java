@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Component
 public class MigrantMapper {
-
     public MigrantResponseDto toResponseDto(Migrant migrant) {
         MigrantResponseDto dto = new MigrantResponseDto();
         BeanUtils.copyProperties(migrant, dto);

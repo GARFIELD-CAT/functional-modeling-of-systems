@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Component
 public class RoadMapMapper {
-
     public RoadMapResponseDto toResponseDto(RoadMap roadMap) {
         RoadMapResponseDto dto = new RoadMapResponseDto();
         BeanUtils.copyProperties(roadMap, dto, "steps");

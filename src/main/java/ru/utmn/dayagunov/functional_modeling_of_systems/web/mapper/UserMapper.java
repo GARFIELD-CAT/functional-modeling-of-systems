@@ -6,7 +6,6 @@ import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.user.UserRespons
 
 @Component
 public class UserMapper {
-
     public UserResponseDto toResponseDto(User user) {
         UserResponseDto dto = new UserResponseDto();
         dto.setId(user.getId());
