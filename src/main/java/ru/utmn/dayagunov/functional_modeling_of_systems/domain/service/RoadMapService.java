@@ -2,6 +2,7 @@ package ru.utmn.dayagunov.functional_modeling_of_systems.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant.Migrant;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.roadmap.RoadMap;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.roadmap.Step;
@@ -21,6 +22,7 @@ public class RoadMapService {
     private final RuleRepository ruleRepository;
     private final MigrantService migrantService;
 
+    @Transactional(readOnly = true)
     public RoadMap createRoadMap() {
         Migrant migrant = migrantService.getCurrentMigrant();
         RoadMap roadMap = new RoadMap();

@@ -60,7 +60,7 @@ public class RuleService {
             return ruleRepository.findEffectiveOn(LocalDate.now());
         }
 
-        return ruleRepository.findAll();
+        return ruleRepository.findAllWithConditions();
     }
 
     @Transactional

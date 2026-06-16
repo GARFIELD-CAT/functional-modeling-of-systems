@@ -29,15 +29,14 @@ public class MigrantService {
 
     @Transactional
     public Migrant createMigrant(CreateMigrantRequestBodyDto body) {
-        String userLogin = userService.getCurrentUserLogin();
+        User currentUser = userService.getCurrentUser();
 
-        if (migrantRepository.findByUserLogin(userLogin).isPresent()) {
+        if (migrantRepository.findByUserLogin(currentUser.getLogin()).isPresent()) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT, "Профиль мигранта для текущего пользователя уже существует."
             );
         }
 
-        User currentUser = userService.getCurrentUser();
         Country country = findCountryById(body.getCountryOfCitizenshipId());
         PurposeOfVisit purpose = findPurposeById(body.getPurposeOfVisitId());
 
