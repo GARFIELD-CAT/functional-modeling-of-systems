@@ -56,8 +56,7 @@ public class MigrantService {
         accessGuard.checkOwnerOrAdmin(migrant);
 
         BeanUtils.copyProperties(body, migrant, getNullPropertyNames(body));
-        //TODO проверить!!!! При частичном обновлении
-        // Страну и цель резолвим только если они переданы (частичное обновление).
+
         if (body.getCountryOfCitizenshipId() != null) {
             migrant.setCountryOfCitizenship(findCountryById(body.getCountryOfCitizenshipId()));
         }
