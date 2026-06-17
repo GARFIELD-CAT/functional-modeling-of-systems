@@ -80,12 +80,12 @@ public class RuleController {
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера", content = @Content)
     })
     @GetMapping
-    public ResponseEntity<List<RuleResponseDto>> list(
+    public ResponseEntity<List<RuleResponseDto>> getRules(
             @Parameter(description = "Возвращать только действующие правила")
             @RequestParam(defaultValue = "true") boolean onlyActive
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ruleService.listRules(onlyActive).stream()
+                .body(ruleService.getRules(onlyActive).stream()
                         .map(ruleMapper::toResponseDto)
                         .toList());
     }

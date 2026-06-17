@@ -55,7 +55,7 @@ public class RuleService {
     }
 
     @Transactional(readOnly = true)
-    public List<Rule> listRules(boolean onlyActive) {
+    public List<Rule> getRules(boolean onlyActive) {
         if (onlyActive) {
             return ruleRepository.findEffectiveOn(LocalDate.now());
         }
