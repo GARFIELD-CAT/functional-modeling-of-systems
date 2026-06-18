@@ -3,8 +3,8 @@ package ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.BeanWrapperImpl;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.RuleSubject;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.OwnedByUser;
+import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.RuleSubjectInterface;
+import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.OwnedByUserInterface;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.User;
 
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @ToString(exclude = {"user", "countryOfCitizenship", "purposeOfVisit"})
 @EqualsAndHashCode(of = "id")
 @Table(name = "migrants")
-public class Migrant implements OwnedByUser, RuleSubject {
+public class Migrant implements OwnedByUserInterface, RuleSubjectInterface {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

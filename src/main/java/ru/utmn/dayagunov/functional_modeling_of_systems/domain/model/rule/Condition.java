@@ -30,7 +30,7 @@ public class Condition {
     @Column(nullable = false, length = 500)
     private String value;
 
-    public boolean matches(RuleSubject subject) {
+    public boolean matches(RuleSubjectInterface subject) {
         Object actual = subject.getFieldValue(field);
         return operator.check(actual, value);
     }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.OwnedByUser;
+import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.OwnedByUserInterface;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.User;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.UserRoles;
 
@@ -13,7 +13,7 @@ import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.UserRo
 public class AccessGuard {
     private final UserService userService;
 
-    public void checkOwnerOrAdmin(OwnedByUser entity) {
+    public void checkOwnerOrAdmin(OwnedByUserInterface entity) {
         User currentUser = userService.getCurrentUser();
 
         if (UserRoles.ADMIN.equals(currentUser.getRole())) {

@@ -66,7 +66,7 @@ public class Rule {
         }
     }
 
-    public boolean matches(RuleSubject subject) {
+    public boolean matches(RuleSubjectInterface subject) {
         for (Condition condition : conditions) {
             if (!condition.matches(subject)) {
                 return false;
@@ -75,7 +75,7 @@ public class Rule {
         return true;
     }
 
-    public LocalDate calculateDeadline(RuleSubject subject) {
+    public LocalDate calculateDeadline(RuleSubjectInterface subject) {
         LocalDate date = subject.getEntryDate();
         LocalDate base = date != null ? date : LocalDate.now();
 
