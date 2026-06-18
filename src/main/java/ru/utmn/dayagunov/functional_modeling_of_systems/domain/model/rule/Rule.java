@@ -2,7 +2,6 @@ package ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant.Migrant;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -67,17 +66,19 @@ public class Rule {
         }
     }
 
-    public boolean matches(Migrant migrant) {
+    public boolean matches(RuleSubject subject) {
         for (Condition condition : conditions) {
-            if (!migrant.check(condition)) {
+            if (!condition.matches(subject)) {
                 return false;
             }
         }
         return true;
     }
 
-    public LocalDate calculateDeadline(Migrant migrant) {
-        LocalDate base = migrant.getEntryDate() != null ? migrant.getEntryDate() : LocalDate.now();
+    public LocalDate calculateDeadline(RuleSubject subject) {
+        LocalDate date = subject.getEntryDate();
+        LocalDate base = date != null ? date : LocalDate.now();
+
         return base.plusDays(period);
     }
 }

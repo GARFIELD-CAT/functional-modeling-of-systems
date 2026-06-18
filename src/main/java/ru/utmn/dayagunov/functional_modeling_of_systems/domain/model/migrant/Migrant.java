@@ -3,7 +3,7 @@ package ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.BeanWrapperImpl;
-import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Condition;
+import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.RuleSubject;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.OwnedByUser;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.user.User;
 
@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @ToString(exclude = {"user", "countryOfCitizenship", "purposeOfVisit"})
 @EqualsAndHashCode(of = "id")
 @Table(name = "migrants")
-public class Migrant implements OwnedByUser {
+public class Migrant implements OwnedByUser, RuleSubject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -75,18 +75,12 @@ public class Migrant implements OwnedByUser {
     @Column(nullable = false)
     private boolean hasRussianDiploma = false;
 
-    public boolean check(Condition condition) {
-        Object actual = readProperty(condition.getField());
-
-        return condition.getOperator().check(actual, condition.getValue());
-    }
-
-    private Object readProperty(String path) {
+    public Object getFieldValue(String field) {
         try {
-            return new BeanWrapperImpl(this).getPropertyValue(path);
+            return new BeanWrapperImpl(this).getPropertyValue(field);
         } catch (Exception e) {
             throw new IllegalStateException(
-                    "Не удалось прочитать поле '" + path + "' у мигранта id=" + id, e);
+                    "Не удалось прочитать поле '" + field + "' у мигранта id=" + id, e);
         }
     }
 }

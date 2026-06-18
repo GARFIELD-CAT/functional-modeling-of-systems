@@ -1,5 +1,7 @@
 package ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule;
 
+import ru.utmn.dayagunov.functional_modeling_of_systems.domain.support.Comparisons;
+
 public enum Operators {
     EQ {
         @Override

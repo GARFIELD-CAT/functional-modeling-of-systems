@@ -29,4 +29,9 @@ public class Condition {
 
     @Column(nullable = false, length = 500)
     private String value;
+
+    public boolean matches(RuleSubject subject) {
+        Object actual = subject.getFieldValue(field);
+        return operator.check(actual, value);
+    }
 }

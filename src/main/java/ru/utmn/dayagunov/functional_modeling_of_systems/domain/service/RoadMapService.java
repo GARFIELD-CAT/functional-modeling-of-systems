@@ -7,6 +7,7 @@ import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.migrant.Mig
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.roadmap.RoadMap;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.roadmap.Step;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.Rule;
+import ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule.RuleSubject;
 import ru.utmn.dayagunov.functional_modeling_of_systems.domain.repository.rule.RuleRepository;
 
 import java.time.LocalDate;
@@ -31,16 +32,16 @@ public class RoadMapService {
         return roadMap;
     }
 
-    private List<Step> createSteps(Migrant migrant) {
+    private List<Step> createSteps(RuleSubject subject) {
         List<Rule> rules = ruleRepository.findEffectiveOn(LocalDate.now());
         Map<String, Step> messages = new LinkedHashMap<>();
 
         for (Rule rule : rules) {
-            if (!rule.matches(migrant)) {
+            if (!rule.matches(subject)) {
                 continue;
             }
 
-            LocalDate deadline = rule.calculateDeadline(migrant);
+            LocalDate deadline = rule.calculateDeadline(subject);
             String message = generateMessage(rule, deadline);
             Step candidate = new Step(rule.getTitle(), deadline, message);
 

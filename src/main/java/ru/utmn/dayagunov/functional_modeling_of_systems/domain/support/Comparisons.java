@@ -1,4 +1,4 @@
-package ru.utmn.dayagunov.functional_modeling_of_systems.domain.model.rule;
+package ru.utmn.dayagunov.functional_modeling_of_systems.domain.support;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
