@@ -5,6 +5,15 @@ import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
 public final class Comparisons {
+    public static boolean equalsValue(Object actual, String expected) {
+        if (actual == null) {
+            return expected == null || "null".equals(expected);
+        }
+        actual = unwrapEntity(actual);
+
+        return String.valueOf(actual).equals(expected);
+    }
+
     public static int compare(Object actual, String expected) {
         actual = unwrapEntity(actual);
 

@@ -6,19 +6,13 @@ public enum Operators {
     EQ {
         @Override
         public boolean check(Object actual, String expected) {
-            if (actual == null) {
-                return expected == null || "null".equals(expected);
-            }
-
-            actual = Comparisons.unwrapEntity(actual);
-
-            return String.valueOf(actual).equals(expected);
+            return Comparisons.equalsValue(actual, expected);
         }
     },
     NO_EQ {
         @Override
         public boolean check(Object actual, String expected) {
-            return !EQ.check(actual, expected);
+            return !Comparisons.equalsValue(actual, expected);
         }
     },
     GT {
