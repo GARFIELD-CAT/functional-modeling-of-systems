@@ -20,6 +20,7 @@ import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule.RuleRespons
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.dto.rule.UpdateRuleRequestBodyDto;
 import ru.utmn.dayagunov.functional_modeling_of_systems.web.mapper.RuleMapper;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Tag(name = "Правила", description = "Создание правил с условиями и управление ими (Доступно ADMIN)")
@@ -87,6 +88,7 @@ public class RuleController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ruleService.getRules(onlyActive).stream()
                         .map(ruleMapper::toResponseDto)
+                        .sorted(Comparator.comparing(RuleResponseDto::getTitle))
                         .toList());
     }
 

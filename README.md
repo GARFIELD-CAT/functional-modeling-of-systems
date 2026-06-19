@@ -208,7 +208,7 @@ API защищён Spring Security (роли **USER** и **ADMIN**). Досту�
     "conditions": [
       {
         "field": "имя поля профиля мигранта, напр. hasMedicalExamination",
-        "operator": "EQ | NO_EQ | GT | LT | GTE | LTE | IN | NOT_IN",
+        "operator": "EQ | NOT_EQ | GT | LT | GTE | LTE | IN | NOT_IN",
         "value": "string, напр. \"false\" или \"1,2,3\" для IN"
       }
     ]

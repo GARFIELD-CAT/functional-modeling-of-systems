@@ -9,7 +9,7 @@ public enum Operators {
             return Comparisons.equalsValue(actual, expected);
         }
     },
-    NO_EQ {
+    NOT_EQ {
         @Override
         public boolean check(Object actual, String expected) {
             return !Comparisons.equalsValue(actual, expected);

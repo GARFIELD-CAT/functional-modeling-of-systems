@@ -20,7 +20,7 @@ public class RuleConditionDto {
     @MigrantField
     private String field;
 
-    @Schema(requiredMode = REQUIRED, description = "Оператор сравнения. \n Возможные варианты: EQ - равно, NO_EQ - не равно" +
+    @Schema(requiredMode = REQUIRED, description = "Оператор сравнения. \n Возможные варианты: EQ - равно, NOT_EQ - не равно" +
             ", GT - больше, LT - меньше,  GTE - больше или равно, LTE - меньше или равно, IN - содержит, NOT_IN - не содержит")
     @NotNull(message = "Оператор должен быть указан.")
     private Operators operator;
